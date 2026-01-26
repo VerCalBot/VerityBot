@@ -7,12 +7,7 @@ Python 3.x
 ## Environment Variables
 This project uses an external API and requires environment variables to be set.
 
-Create a .env file in the project root locally with the following variables:
-
-API_KEY=your_api_key_here\
-API_BASE_URL=https://api.example.com
-
-The .env file is not tracked by Git and is loaded using python-dotenv
+API_KEY
 
 ## Project Structure
 main.py\
