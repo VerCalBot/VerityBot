@@ -1,5 +1,5 @@
 # **VerityBot - Subject to change**
-The project will allow for data exploration of API data pulled from Verkada. 
+The project will allow for exploration of data pulled from the Verkada API.
 
 ## Requirements
 Python 3.x
