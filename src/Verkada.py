@@ -38,10 +38,10 @@ def _get(session: requests.Session, endpoint: str) -> requests.Response:
     logging.error("Cannot continue")
     exit(1)
 
-def _get_unix_timestamp(time_delta: int=1) -> int:
+def _get_unix_timestamp(time_delta: int=1) -> str:
   yesterday = datetime.date.today() - datetime.timedelta(time_delta)
   unix_time = yesterday.strftime("%s")
-  return int(unix_time)
+  return unix_time
 
 
 def get_access_events(session: requests.Session):
