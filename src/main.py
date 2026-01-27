@@ -37,7 +37,6 @@ def main():
 
     verkada_service = Verkada.login(args)
     verkada_events = Verkada.get_access_events(verkada_service)
-    print(verkada_events)
 
 if __name__ == '__main__':
     main()
