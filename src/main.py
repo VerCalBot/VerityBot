@@ -1,4 +1,5 @@
 import Verkada
+import Utils
 import argparse
 import os
 import logging
@@ -37,6 +38,9 @@ def main():
 
     verkada_service = Verkada.login(args)
     verkada_events = Verkada.get_access_events(verkada_service)
+
+    # print the first entry in our response
+    Utils.pretty_print_json(verkada_events['events'][0])
 
 if __name__ == '__main__':
     main()
