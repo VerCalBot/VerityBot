@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import Verkada
 import Utils
 import argparse
@@ -33,6 +34,10 @@ def setup_cli() -> argparse.Namespace:
     return args
 
 def main():
+
+    # Load environment variables from the .env file (if present)
+    load_dotenv()
+
     args = setup_cli()
     logging.info(f"Initializing Verkada service")
 
