@@ -40,7 +40,8 @@ def _get(session: requests.Session, endpoint: str) -> requests.Response:
 
 def _get_unix_timestamp(time_delta: int=1) -> str:
   yesterday = datetime.date.today() - datetime.timedelta(time_delta)
-  unix_time = yesterday.strftime("%s")
+  yesterday_dt = datetime.datetime.combine(yesterday, datetime.time.min, tzinfo=datetime.timezone.utc)
+  unix_time = int(yesterday_dt.timestamp())
   return unix_time
 
 
