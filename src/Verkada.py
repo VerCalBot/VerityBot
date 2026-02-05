@@ -3,12 +3,21 @@ import requests
 import logging
 import datetime
 
+from Pipeline import Pipeline
+
 class VerkadaContext:
-    def __init__(self, time_delta: int=7):
+    def __init__(self, pipeline: Pipeline, time_delta: int=7):
         self._current_page: dict = {}
         self._session = requests.Session()
         self._time_delta: int = time_delta
         self._next_page_token: int = -1
+        self._pipeline = pipeline
+
+    def pipe(self):
+        self._pipeline.pipe_data(self._current_page)
+
+    def set_pipeline(self, pipeline: Pipeline):
+        self._pipeline = pipeline
 
     ## Verkada API-Specific Logic
     def current_page(self) -> dict:
@@ -71,6 +80,11 @@ class VerkadaContext:
         self._next_page_token = self._current_page['next_page_token']
 
         return self._current_page
+
+    # checks if we've reached the end-of-request page
+    def EOR_page(self):
+        return self._current_page.get('next_page_token', None) == None
+
 
     def next_page_available(self) -> bool:
         return self._next_page_token != None
