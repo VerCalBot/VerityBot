@@ -38,7 +38,7 @@ def _get(session: requests.Session, endpoint: str) -> requests.Response:
     logging.error("Cannot continue")
     exit(1)
 
-def _get_unix_timestamp(time_delta: int=1) -> str:
+def _get_unix_timestamp(time_delta: int=1) -> int:
   yesterday = datetime.date.today() - datetime.timedelta(time_delta)
   yesterday_dt = datetime.datetime.combine(yesterday, datetime.time.min, tzinfo=datetime.timezone.utc)
   unix_time = int(yesterday_dt.timestamp())

@@ -36,7 +36,8 @@ def setup_cli() -> argparse.Namespace:
 def main():
 
     # Load environment variables from the .env file (if present)
-    load_dotenv()
+    # Docker already load environment variables with the etl container, override specifies if env variables are already loaded then dont run.
+    load_dotenv(override=False)
 
     args = setup_cli()
     logging.info(f"Initializing Verkada service")
