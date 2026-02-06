@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from configparser import ConfigParser
 import Verkada
 import Utils
 import argparse
@@ -37,6 +38,12 @@ def main():
 
     # Load environment variables from the .env file (if present)
     load_dotenv()
+
+    # Load config.ini file
+    config = ConfigParser()
+    config.read("../config.ini")
+
+    print(config["Email"]["email_to"])
 
     args = setup_cli()
     logging.info(f"Initializing Verkada service")
