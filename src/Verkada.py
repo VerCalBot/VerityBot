@@ -19,7 +19,6 @@ class VerkadaContext:
     def set_pipeline(self, pipeline: Pipeline):
         self._pipeline = pipeline
 
-
     ## Verkada API-Specific Logic
     def current_page(self) -> dict:
         return self._current_page
@@ -85,7 +84,6 @@ class VerkadaContext:
     # checks if we've reached the end-of-request page
     def EOR_page(self) -> bool:
         return self._current_page.get('next_page_token', None) == None
-
 
     def next_page_available(self) -> bool:
         return self._next_page_token != None
