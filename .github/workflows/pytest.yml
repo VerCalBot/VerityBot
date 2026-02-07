@@ -23,7 +23,7 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Run test through makefile
+      - name: Run tests
         run: make -f test.mk
         env:
           VERKADA_API_KEY: ${{ secrets.VERKADA_API_KEY }}
