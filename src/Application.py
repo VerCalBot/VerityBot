@@ -13,9 +13,11 @@ def init():
     logging.info(f"Initializing Verkada service")
     verkada.login(args.verkada_api_key)
 
+
+    # I propose this is how we iterate through request pages
     while verkada.next_page_available():
         current_page = verkada.get_next_page()
         if not verkada.EOR_page():
             ## pipe data to elasticsearch api, for now we're just printing
             verkada.pipe()
-            Utils.pretty_print_json(current_page)
+            Utils.pretty_print_json(current_page['events'][0])
