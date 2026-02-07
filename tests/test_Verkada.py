@@ -19,9 +19,9 @@ def Verkada_api_key_exists():
     global cached_verkada_api_key
     cached_verkada_api_key = verkada_api_key
 
-def higher_order_sysexit_handler(f: Callable[[str], Any], arg: str) -> None:
+def higher_order_sysexit_handler(func: Callable[[str], Any], arg: str) -> None:
     with pytest.raises(SystemExit) as e:
-        f(arg)
+        func(arg)
     assert(e.type == SystemExit)
     assert(e.value.code == 1)
 
