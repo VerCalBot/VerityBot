@@ -17,6 +17,7 @@ def init():
     # I propose this is how we iterate through request pages
     while verkada.next_page_available():
         current_page = verkada.get_next_page()
+        # check for the end-of-request page
         if not verkada.EOR_page():
             # pipe data to some kind of filtering pipeline,
             # for now we're just doing nothing, then printing
