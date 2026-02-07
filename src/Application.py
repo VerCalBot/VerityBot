@@ -3,7 +3,7 @@ import CLI
 import Utils
 
 from Verkada import VerkadaContext
-from Pipeline import Pipeline
+from interfaces.Pipeline import Pipeline
 
 def init():
     args = CLI.setup_cli()

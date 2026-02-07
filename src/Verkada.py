@@ -3,7 +3,7 @@ import requests
 import logging
 import datetime
 
-from Pipeline import Pipeline
+from interfaces.Pipeline import Pipeline
 
 class VerkadaContext:
     def __init__(self, pipeline: Pipeline, time_delta: int=7):
