@@ -1,4 +1,4 @@
-name: Run Pytest on Pull Request
+name: Run Unit Tests on Pull Request
 
 on:
   pull_request:
@@ -30,3 +30,5 @@ jobs:
       - name: Run test through makefile
         # Command to run your tests
         run: make -f test.mk
+        env:
+          VERKADA_API_KEY: ${{ secrets.VERKADA_API_KEY }}
