@@ -81,12 +81,6 @@ class VerkadaContext:
         self._next_page_token = self._current_page['next_page_token']
 
         return self._current_page
-      
-    def _get_unix_timestamp(time_delta: int=1) -> str:
-      yesterday = datetime.date.today() - datetime.timedelta(time_delta)
-      yesterday_dt = datetime.datetime.combine(yesterday, datetime.time.min, tzinfo=datetime.timezone.utc)
-      unix_time = int(yesterday_dt.timestamp())
-      return unix_time
 
     # checks if we've reached the end-of-request page
     def EOR_page(self) -> bool:
