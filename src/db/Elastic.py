@@ -42,4 +42,6 @@ class Elastic(Pipeline):
         self.add_index(index_name, update_index=True)
 
     def pipe_data(self, data: dict):
+        # This is where we would populate the remote database in Elasticsearch
+        # for now, we'll just call the interface method
         return super().pipe_data(data)

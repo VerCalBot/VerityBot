@@ -3,7 +3,7 @@ import CLI
 import Utils
 
 from Verkada import VerkadaContext
-from interfaces.Pipeline import Pipeline
+from Pipeline import Pipeline
 
 def init():
     args = CLI.setup_cli()
@@ -18,6 +18,7 @@ def init():
     while verkada.next_page_available():
         current_page = verkada.get_next_page()
         if not verkada.EOR_page():
-            ## pipe data to elasticsearch api, for now we're just printing
+            # pipe data to some kind of filtering pipeline,
+            # for now we're just doing nothing, then printing
             verkada.pipe()
             Utils.pretty_print_json(current_page['events'][0])

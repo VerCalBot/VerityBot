@@ -6,4 +6,4 @@ all:
 	$(PYTHON) $(TARGET) $(FLAGS)
 
 clean:
-	> target.log
+	rm target.log

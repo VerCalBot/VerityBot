@@ -1,0 +1,32 @@
+name: Run Pytest on Pull Request
+
+on:
+  pull_request:
+    # Triggers the workflow on 'opened', 'synchronize' (when PR is updated),
+    # and 'reopened' events
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-and-test:
+    # Run on the latest version of Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        # Action to check out your repository's code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        # Action to set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' # Specify your required Python version
+
+      - name: Install dependencies
+        # Install pytest and any other packages required by your project
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run test through makefile
+        # Command to run your tests
+        run: make -f test.mk
