@@ -13,4 +13,4 @@ EXPOSE 8080
 RUN useradd app
 USER app
 
-CMD ["python", "src/main.py"]
+CMD ["python", "src/main.py", "--output-log", "/tmp/app.log"]
