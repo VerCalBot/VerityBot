@@ -29,7 +29,7 @@ def setup_cli() -> argparse.Namespace:
                         default=default_val,
                         help='Verkada API key (defaults to VERKADA_API_KEY env var, if set)')
     parser.add_argument('--output-log',
-                        required=True,
+                        required=False,
                         default=None,
                         help='Output log file for the current build')
 

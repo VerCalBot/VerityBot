@@ -78,8 +78,14 @@ class VerkadaContext:
 
         self._current_page = self._get(endpoint).json()
         self._next_page_token = self._current_page['next_page_token']
-
+        
         return self._current_page
+    
+
+    def current_page_ndjson(self) -> str:
+        return "\n".join(
+            json.dumps(e) for e in self._current_page.get("events", [])
+        )
 
     # checks if we've reached the end-of-request page
     def EOR_page(self) -> bool:
