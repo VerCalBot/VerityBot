@@ -14,12 +14,9 @@ def init():
     verkada.login(args.verkada_api_key)
 
 
-    # I propose this is how we iterate through request pages
     while verkada.next_page_available():
         current_page = verkada.get_next_page()
-        # check for the end-of-request page
         if not verkada.EOR_page():
-            # pipe data to some kind of filtering pipeline,
-            # for now we're just doing nothing, then printing
+            # right now, verkada's current pipeline is doing nothing
             verkada.pipe()
             Utils.pretty_print_json(current_page['events'][0])
