@@ -14,7 +14,6 @@ sender_email = config ['Email'] ['EMAIL_FROM']
 email_subject = config ['Email'] ['EMAIL_SUBJECT']
 email_message = config ['Email'] ['EMAIL_MESSAGE']
 
-
 message = MIMEMultipart()
 message["From"] = sender_email
 message["To"] = recipient_email
@@ -28,6 +27,7 @@ email_password = os.getenv("EMAIL_PASSWORD")
 
 # creates SMTP session
 s = smtplib.SMTP('smtp.gmail.com',587)
+
 
 s.set_debuglevel(1)
 
