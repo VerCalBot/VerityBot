@@ -8,7 +8,6 @@ from email.mime.text import MIMEText
 config = configparser.ConfigParser()
 config.read("../config.ini")
 
-# Assign variables from ini
 recipient_email = config ['Email'] ['EMAIL_TO']
 sender_email = config ['Email'] ['EMAIL_FROM']
 email_subject = config ['Email'] ['EMAIL_SUBJECT']
@@ -22,12 +21,9 @@ body = email_message
 message.attach(MIMEText(body, "plain"))
 
 load_dotenv()
-# Retrieve password from env
 email_password = os.getenv("EMAIL_PASSWORD")
 
-# creates SMTP session
 s = smtplib.SMTP('smtp.gmail.com',587)
-
 
 s.set_debuglevel(1)
 
@@ -38,3 +34,4 @@ s.login(sender_email, email_password)
 s.sendmail(sender_email,recipient_email,message.as_string())
 
 s.quit()
+
