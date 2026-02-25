@@ -19,4 +19,8 @@ def init():
         if not verkada.EOR_page():
             # right now, verkada's current pipeline is doing nothing
             verkada.pipe()
-            Utils.pretty_print_json(current_page['events'][0])
+            print(verkada.current_page_ndjson())
+
+            # To format in regular JSON instead of NDJSON, uncomment the line below and comment out the print statement above
+            #Utils.pretty_print_json(current_page['events'][0])
+
