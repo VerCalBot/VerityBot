@@ -1,2 +1,6 @@
 [Email]
-email_to = 1234@example.com
+EMAIL_TO = receiver_email@example.com
+EMAIL_FROM = your_email@example.com
+EMAIL_SUBJECT = Subject for the Email 
+EMAIL_MESSAGE = The message you would like to send along with the dashboard link
+EMAIL_SEND_TIME = 07:00pm
