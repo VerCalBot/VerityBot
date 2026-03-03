@@ -87,6 +87,23 @@ class VerkadaContext:
             json.dumps(e) for e in self._current_page.get("events", [])
         )
 
+    # Creates Bulk ndjson using event ID as "key" so all index events will be unique, and prevents duplication allowing for replacement in ElasticSearch
+    def current_page_ndjson_bulk(self) -> str:
+
+        events = self._current_page.get("events", [])
+        lines = []
+        for e in events:
+            action = {
+                "index":{
+                    "_index":"verkada_events",
+                    "_id" : e["event_id"]
+            }
+            }
+            lines.append(json.dumps(action))
+            lines.append(json.dumps(e))
+
+        return "\n".join(lines)+ "\n"
+    
     # checks if we've reached the end-of-request page
     def EOR_page(self) -> bool:
         return self._current_page.get('next_page_token', None) == None
