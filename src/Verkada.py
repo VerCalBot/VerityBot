@@ -6,6 +6,23 @@ import datetime
 from Pipeline import Pipeline
 
 class VerkadaContext:
+    # Fields to exclude from events
+    EXCLUDED_FIELDS = {
+        'organization_id',
+        'device_type',
+        'end_timestamp',
+        'entityType',
+        'floorId',
+        'floors',
+        'inputValue',
+        'rawCard',
+        'scenarioInfo',
+        'direction',
+        'lockdownInfo',
+        'auxInputId',
+        'auxInputName'
+    }
+
     def __init__(self, pipeline: Pipeline=Pipeline(), time_delta: int=7):
         self._current_page: dict = {}
         self._session = requests.Session()
@@ -21,7 +38,7 @@ class VerkadaContext:
 
     ## Verkada API-Specific Logic
     def current_page(self) -> dict:
-        return self._current_page
+        return {**self._current_page, 'events': [self._filter_event(e) for e in self._current_page.get('events', []) if e.get('event_info', {}).get('userName')]}
 
     def next_page_token(self) -> int:
         return self._next_page_token
@@ -84,8 +101,18 @@ class VerkadaContext:
 
     def current_page_ndjson(self) -> str:
         return "\n".join(
-            json.dumps(e) for e in self._current_page.get("events", [])
+            json.dumps(self._filter_event(e)) for e in self._current_page.get("events", []) if e.get('event_info', {}).get('userName')
         )
+    
+    def _filter_event(self, event: dict) -> dict:
+        filtered = {}
+        for k, v in event.items():
+            if k not in self.EXCLUDED_FIELDS:
+                if isinstance(v, dict):
+                    filtered[k] = self._filter_event(v)
+                else:
+                    filtered[k] = v
+        return filtered
 
     # checks if we've reached the end-of-request page
     def EOR_page(self) -> bool:
