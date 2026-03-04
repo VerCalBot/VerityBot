@@ -117,7 +117,7 @@ class VerkadaContext:
     # Creates Bulk ndjson using event ID as "key" so all index events will be unique, and prevents duplication allowing for replacement in ElasticSearch
     def current_page_ndjson_bulk(self) -> str:
 
-        events = self._current_page.get("events", [])
+        events = [e for e in self._current_page.get("events", []) if e.get('event_info', {}).get('userName')]
         lines = []
         for e in events:
             action = {
@@ -127,8 +127,9 @@ class VerkadaContext:
             }
             }
             lines.append(json.dumps(action))
-            lines.append(json.dumps(e))
+            lines.append(json.dumps(self._filter_event(e)))
 
+        print("\n".join(lines)+ "\n")
         return "\n".join(lines)+ "\n"
     
     # checks if we've reached the end-of-request page
