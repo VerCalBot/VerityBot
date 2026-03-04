@@ -129,7 +129,6 @@ class VerkadaContext:
             lines.append(json.dumps(action))
             lines.append(json.dumps(self._filter_event(e)))
 
-        print("\n".join(lines)+ "\n")
         return "\n".join(lines)+ "\n"
     
     # checks if we've reached the end-of-request page
