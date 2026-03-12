@@ -7,6 +7,7 @@ services:
       - .env
     environment:
       - "discovery.type=single-node"
+      - "xpack.security.http.ssl.enabled=false"
       - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
     ports:
       - 9200:9200
