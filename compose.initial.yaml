@@ -1,0 +1,42 @@
+services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.3.0
+    container_name: elasticsearch
+    env_file: 
+      - .env
+    environment:
+      - "discovery.type=single-node"
+      - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
+    ports:
+      - 9200:9200
+    # persist Elasticsearch data
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana-wolfi:9.3.0
+    container_name: kibana
+    env_file: 
+      - .env
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: "${KIBANA_SYSTEM_PASSWORD}"
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: "${KIBANA_ENCRYPTION_KEY}"
+    depends_on:
+      - elasticsearch
+      
+  etl:
+    build: .
+    image: etl_json
+    container_name: etl_json
+    env_file: 
+      - .env
+    depends_on:
+      - elasticsearch
+
+volumes:
+  esdata:
