@@ -3,38 +3,29 @@ import requests
 import logging
 import datetime
 
-from Pipeline import Pipeline
+# Fields to exclude from events
+EXCLUDED_FIELDS = {
+    'organization_id',
+    'device_type',
+    'end_timestamp',
+    'entityType',
+    'floorId',
+    'floors',
+    'inputValue',
+    'rawCard',
+    'scenarioInfo',
+    'direction',
+    'lockdownInfo',
+    'auxInputId',
+    'auxInputName'
+}
 
 class VerkadaContext:
-    # Fields to exclude from events
-    EXCLUDED_FIELDS = {
-        'organization_id',
-        'device_type',
-        'end_timestamp',
-        'entityType',
-        'floorId',
-        'floors',
-        'inputValue',
-        'rawCard',
-        'scenarioInfo',
-        'direction',
-        'lockdownInfo',
-        'auxInputId',
-        'auxInputName'
-    }
-
-    def __init__(self, pipeline: Pipeline=Pipeline(), time_delta: int=7):
+    def __init__(self, time_delta: int=7):
         self._current_page: dict = {}
         self._session = requests.Session()
         self._time_delta: int = time_delta
         self._next_page_token: int = -1
-        self._pipeline = pipeline
-
-    def pipe(self):
-        self._pipeline.pipe_data(self._current_page)
-
-    def set_pipeline(self, pipeline: Pipeline):
-        self._pipeline = pipeline
 
     ## Verkada API-Specific Logic
     def current_page(self) -> dict:
@@ -95,19 +86,19 @@ class VerkadaContext:
 
         self._current_page = self._get(endpoint).json()
         self._next_page_token = self._current_page['next_page_token']
-        
+
         return self._current_page
-    
+
 
     def current_page_ndjson(self) -> str:
         return "\n".join(
             json.dumps(self._filter_event(e)) for e in self._current_page.get("events", []) if e.get('event_info', {}).get('userName')
         )
-    
+
     def _filter_event(self, event: dict) -> dict:
         filtered = {}
         for k, v in event.items():
-            if k not in self.EXCLUDED_FIELDS:
+            if k not in EXCLUDED_FIELDS:
                 if isinstance(v, dict):
                     filtered[k] = self._filter_event(v)
                 else:
@@ -130,9 +121,9 @@ class VerkadaContext:
             lines.append(json.dumps(self._filter_event(e)))
 
         return "\n".join(lines)+ "\n"
-    
+
     # checks if we've reached the end-of-request page
-    def EOR_page(self) -> bool:
+    def is_eor_page(self) -> bool:
         return self._current_page.get('next_page_token', None) == None
 
     def next_page_available(self) -> bool:

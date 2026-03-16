@@ -9,14 +9,9 @@ def _setup_logging(args: argparse.Namespace):
     if args.debug:
         level = logging.DEBUG
 
-    logging.basicConfig(
-        filename=args.output_log,
-        level=level,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        filemode='a')
+    logging.basicConfig(level=level)
 
 def setup_cli() -> argparse.Namespace:
-
     parser = argparse.ArgumentParser()
 
     default_val = os.environ.get("VERKADA_API_KEY", None)
@@ -28,10 +23,17 @@ def setup_cli() -> argparse.Namespace:
                         required=required_val,
                         default=default_val,
                         help='Verkada API key (defaults to VERKADA_API_KEY env var, if set)')
-    parser.add_argument('--output-log',
+
+    default_val = os.environ.get("ELASTIC_PASSWORD", None)
+    if not default_val:
+        logging.error("ELASTIC_PASSWORD has not been set")
+        exit(1)
+
+    parser.add_argument('--elastic-password',
                         required=False,
-                        default=None,
-                        help='Output log file for the current build')
+                        default=default_val,
+                        help='ElasticSearch password (defaults to ELASTIC_PASSWORD env var, if set)')
+
 
     args = parser.parse_args()
     _setup_logging(args)
