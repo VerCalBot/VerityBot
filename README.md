@@ -32,10 +32,10 @@ Create your environment file from the .env template. \
 Open the ```.env``` and set secrets.
 
 Make the setup script executable. \
-```chmod +x ./scripts/initial_setup.sh```
+```chmod +x ./scripts/initial_setup.sh ./scripts/cert_creation.sh```
 
 run the script. \
-```./scripts/initial_script.sh```
+```./scripts/initial_setup.sh```
 
 When prompted enter the password for the user account ```kibana_system```. \
 **Note**: This should be the same password as the one you placed in ```.env``` for ```KIBANA_SYSTEM_PASSWORD```.
