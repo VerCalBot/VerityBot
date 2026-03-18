@@ -22,7 +22,7 @@ EXCLUDED_FIELDS: set = {
     'auxInputName'
 }
 class VerkadaContext:
-    def __init__(self, time_delta: int=7):
+    def __init__(self, time_delta: int):
         self._current_page: dict = {}
         self._session = requests.Session()
         self._time_delta: int = time_delta
