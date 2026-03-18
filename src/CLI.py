@@ -24,17 +24,6 @@ def setup_cli() -> argparse.Namespace:
                         default=default_val,
                         help='Verkada API key (defaults to VERKADA_API_KEY env var, if set)')
 
-    default_val = os.environ.get("ELASTIC_PASSWORD", None)
-    if not default_val:
-        logging.error("ELASTIC_PASSWORD has not been set")
-        exit(1)
-
-    parser.add_argument('--elastic-password',
-                        required=False,
-                        default=default_val,
-                        help='ElasticSearch password (defaults to ELASTIC_PASSWORD env var, if set)')
-
-
     args = parser.parse_args()
     _setup_logging(args)
 

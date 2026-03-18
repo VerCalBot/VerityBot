@@ -14,7 +14,7 @@ def send_bulk_ndjson(bulk_ndjson: str,ca_path: str = "/certs/ca.crt", user_name:
         timeout=30)
 
     # Indicates what Status code is returned
-    logging.info("HTTP status:", response.status_code)
+    logging.info(f"HTTP status: {response.status_code}")
 
     # Raises HTTP errors
     response.raise_for_status()
