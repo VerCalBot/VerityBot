@@ -32,7 +32,7 @@ Create your environment file from the .env template. \
 Open the ```.env``` and set secrets.
 
 Make the setup script executable. \
-```chmod +x ./scripts/initial_script.sh```
+```chmod +x ./scripts/initial_setup.sh```
 
 run the script. \
 ```./scripts/initial_script.sh```
