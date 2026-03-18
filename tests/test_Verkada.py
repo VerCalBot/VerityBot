@@ -7,7 +7,7 @@ from src.Verkada import VerkadaContext
 INVALID_API_KEY="181w198w1ns9nnny9ecwe9c8ncw89n"
 INVALID_VERKADA_URL="https://api.verkada.com/invalid"
 
-instance = VerkadaContext()
+instance = VerkadaContext(time_delta=1)
 cached_verkada_api_key: str
 load_dotenv()
 
