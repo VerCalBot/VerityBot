@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # Run this in the root dir of your repo
 
-# returns error if anything fails
+# terminate the script immediately if error occurs
 set -e
+
+# Move into repo root
+cd "$(dirname "$0")/.."
 
 # Working folder dir
 CERT_DIR="./certs"
