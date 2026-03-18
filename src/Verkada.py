@@ -2,9 +2,10 @@ import json
 import requests
 import logging
 import datetime
+import Utils
 
 # Fields to exclude from events
-EXCLUDED_FIELDS = {
+EXCLUDED_FIELDS: set = {
     'organization_id',
     'device_type',
     'end_timestamp',
@@ -16,10 +17,10 @@ EXCLUDED_FIELDS = {
     'scenarioInfo',
     'direction',
     'lockdownInfo',
+    'direction'
     'auxInputId',
     'auxInputName'
 }
-
 class VerkadaContext:
     def __init__(self, time_delta: int=7):
         self._current_page: dict = {}
@@ -29,7 +30,7 @@ class VerkadaContext:
 
     ## Verkada API-Specific Logic
     def current_page(self) -> dict:
-        return {**self._current_page, 'events': [self._filter_event(e) for e in self._current_page.get('events', []) if e.get('event_info', {}).get('userName')]}
+        return self._current_page
 
     def next_page_token(self) -> int:
         return self._next_page_token
@@ -89,7 +90,6 @@ class VerkadaContext:
 
         return self._current_page
 
-
     def current_page_ndjson(self) -> str:
         return "\n".join(
             json.dumps(self._filter_event(e)) for e in self._current_page.get("events", []) if e.get('event_info', {}).get('userName')
@@ -107,7 +107,6 @@ class VerkadaContext:
 
     # Creates Bulk ndjson using event ID as "key" so all index events will be unique, and prevents duplication allowing for replacement in ElasticSearch
     def current_page_ndjson_bulk(self) -> str:
-
         events = [e for e in self._current_page.get("events", []) if e.get('event_info', {}).get('userName')]
         lines = []
         for e in events:
@@ -115,12 +114,18 @@ class VerkadaContext:
                 "index":{
                     "_index":"verkada_events",
                     "_id" : e["event_id"]
-            }
+                }
             }
             lines.append(json.dumps(action))
             lines.append(json.dumps(self._filter_event(e)))
 
         return "\n".join(lines)+ "\n"
+
+    def print_events(self):
+        while self.next_page_available():
+            self.get_next_page()
+            if not self.is_eor_page():
+                Utils.pretty_print_json(self._current_page['events'])
 
     # checks if we've reached the end-of-request page
     def is_eor_page(self) -> bool:

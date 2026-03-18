@@ -1,5 +1,6 @@
 import requests
 import time
+import logging
 
 def send_bulk_ndjson(bulk_ndjson: str,ca_path: str = "/certs/ca.crt", user_name: str = "elastic", password: str = None):
 
@@ -13,7 +14,7 @@ def send_bulk_ndjson(bulk_ndjson: str,ca_path: str = "/certs/ca.crt", user_name:
         timeout=30)
 
     # Indicates what Status code is returned
-    print("HTTP status:", response.status_code)
+    logging.info("HTTP status:", response.status_code)
 
     # Raises HTTP errors
     response.raise_for_status()
@@ -23,9 +24,9 @@ def send_bulk_ndjson(bulk_ndjson: str,ca_path: str = "/certs/ca.crt", user_name:
 
     # indicates if errors occured during indexing of bulk ndjson
     if result.get("errors"):
-        print("Bulk indexing finished with errors")
+        logging.error("Bulk indexing finished with errors")
     else:
-        print("Bulk indexing succeeded without errors")
+        logging.info("Bulk indexing succeeded without errors")
 
 # Waits for ElasticSearch to repond. Note assumes CA is mounted at /certs/ca.crt and that DNS name is elasticsearch
 def wait_for_elasticsearch(url : str = "https://elasticsearch:9200", ca_path: str = "/certs/ca.crt", attempts: int = 30, sleep_sec: int = 5) -> bool:
@@ -38,15 +39,15 @@ def wait_for_elasticsearch(url : str = "https://elasticsearch:9200", ca_path: st
                     timeout=5
                 )
 
-            print(f"Attempt {attempt}, HTTP: {response.status_code}")
+            logging.info(f"Attempt {attempt}, HTTP: {response.status_code}")
 
             # Checks to see if request is successful on transport layer
             if response.status_code in (200,401):
-                print("ElasticSearch is ready")
+                logging.info("ElasticSearch is ready")
                 return True
 
         except requests.RequestException as error:
-            print(f"Attempt {attempt} : ElasticSearch is not ready yet {error}")
+            logging.info(f"Attempt {attempt} : ElasticSearch is not ready yet {error}")
 
         time.sleep(sleep_sec)
 
