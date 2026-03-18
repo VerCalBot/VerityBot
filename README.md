@@ -22,11 +22,30 @@ requirements.txt
 
 ## Notes
 
-### First Time docker compose notes
-You need to set a password for kibana_system after you first run compose up or Kibana won't communicate properly due to an authentication issue. 
-Run the following command 
-docker exec -it elasticsearch bin/elasticsearch-reset-password -u kibana_system -i
-Enter the new password, then compose down. If you see your .env with the password for kibana_system then compose back up and you should be good.
+### First Time Setup
 
+Clone the repository.
 
-Additional setup might be needed as the project progresses.
+Create your environment file from the .env template. \
+```cp .env.example .env```
+
+Open the ```.env``` and set secrets.
+
+Make the setup script executable. \
+```chmod +x ./scripts/initial_script.sh```
+
+run the script. \
+```./scripts/initial_script.sh```
+
+When prompted enter the password for the user account ```kibana_system```. \
+**Note**: This should be the same password as the one you placed in ```.env``` for ```KIBANA_SYSTEM_PASSWORD```.
+
+When you see *Setup Complete*, wait until the containers finish starting. \
+Use ```docker compose ps``` to check each containers status.
+
+Once containers are fully running, then open Kibana. \
+```https://localhost:5601```
+
+log in with the following:
+Username: elastic
+Password: The value you set in your ```.env``` file for ```ELASTIC_PASSWORD```
