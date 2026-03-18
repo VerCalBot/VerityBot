@@ -1,14 +1,13 @@
 import os
 import smtplib
-import configparser
 import schedule
 import time
 import re
 from dotenv import load_dotenv
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from ConfigReader import config
 
-config = configparser.ConfigParser()
 config.read("../config.ini")
 
 recipient_email = config ['Email'] ['EMAIL_TO']

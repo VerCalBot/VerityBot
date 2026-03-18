@@ -1,5 +1,5 @@
 PYTHON:=python3
-FLAGS:=--verbose --output-log='target.log'
+FLAGS:=--verbose
 TARGET:=src/main.py
 
 all:
