@@ -18,6 +18,14 @@ fail() {
     exit 1
 }
 
+echo "Checking dependencies..."
+
+# Checks if unzip is installed
+if ! command -v unzip &> /dev/null; then
+    echo "Error: unzip is required but not installed."
+    echo "Please install unzip and rerun this script."
+    exit 1
+fi
 
 echo "Make sure your .env file already contains the kibana_system password before continuing."
 echo "Starting initial stack..."
