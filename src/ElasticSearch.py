@@ -29,20 +29,21 @@ def send_bulk_ndjson(bulk_ndjson: str,ca_path: str = "/certs/ca.crt", user_name:
         logging.info("Bulk indexing succeeded without errors")
 
 # Waits for ElasticSearch to repond. Note assumes CA is mounted at /certs/ca.crt and that DNS name is elasticsearch
-def wait_for_elasticsearch(url : str = "https://elasticsearch:9200", ca_path: str = "/certs/ca.crt", attempts: int = 30, sleep_sec: int = 5) -> bool:
+def wait_for_elasticsearch(url : str = "https://elasticsearch:9200", ca_path: str = "/certs/ca.crt", user_name: str = "elastic", password: str = None, attempts: int = 30, sleep_sec: int = 5) -> bool:
 
     for attempt in range(1, attempts + 1):
         try:
             response = requests.get(
                     url,
                     verify= ca_path,
+                    auth=(user_name, password),
                     timeout=5
                 )
 
             logging.info(f"Attempt {attempt}, HTTP: {response.status_code}")
 
-            # Checks to see if request is successful on transport layer
-            if response.status_code in (200,401):
+            # Checks to see if request is successful with authentification
+            if response.status_code == 200:
                 logging.info("ElasticSearch is ready")
                 return True
 
@@ -51,4 +52,41 @@ def wait_for_elasticsearch(url : str = "https://elasticsearch:9200", ca_path: st
 
         time.sleep(sleep_sec)
 
-    raise RuntimeError("ElasticsSarch did not become ready")
+    raise RuntimeError("ElasticsSearch did not become ready")
+
+# Sends request to return latest timestamp from index
+def get_latest_timestamp(ca_path: str = "/certs/ca.crt", user_name: str = "elastic", password: str = None, attempts: int = 30, sleep_sec: int = 5) -> str | None:
+
+    # retries if errors occur such as status code 503
+    for attempt in range(1, attempts + 1):
+        try:
+            # Sends request to receive latest timestamp from verkada events
+            response = requests.get(
+                url="https://elasticsearch:9200/verkada_events/_search",
+                verify=ca_path,
+                auth=(user_name, password),
+                json={
+                    "sort" : [
+                        {"timestamp" : {"order" : "desc"}}
+                    ],
+                "size" : 1
+                },
+                timeout=30)
+            
+            logging.info(f"Attempt {attempt}, HTTP: {response.status_code}")
+
+            # Checks to see if request is successful
+            if response.status_code == 200:
+                 # format reponse data into Json format
+                result = response.json()
+
+                # if json contains no documents return None, else return timestamp
+                hits = result.get("hits", {}).get("hits", [])
+                return hits[0]["_source"]["timestamp"] if hits else None
+
+        except requests.RequestException as error:
+                logging.error(f"ElasticSearch failed timestamp request {error}")
+        
+        time.sleep(sleep_sec)
+
+    raise RuntimeError("ElasticsSearch services did not become ready in time")
