@@ -83,6 +83,9 @@ def get_latest_timestamp(ca_path: str = "/certs/ca.crt", user_name: str = "elast
                 # if json contains no documents return None, else return timestamp
                 hits = result.get("hits", {}).get("hits", [])
                 return hits[0]["_source"]["timestamp"] if hits else None
+            
+            elif response.status_code == 404:
+                return None
 
         except requests.RequestException as error:
                 logging.error(f"ElasticSearch failed timestamp request {error}")
