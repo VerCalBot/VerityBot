@@ -2,52 +2,59 @@ import os
 import smtplib
 import schedule
 import time
-import re
+import datetime
+import logging
 from dotenv import load_dotenv
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from ConfigReader import config
 
-config.read("../config.ini")
-
 recipient_email = config ['Email'] ['EMAIL_TO']
 sender_email = config ['Email'] ['EMAIL_FROM']
 email_subject = config ['Email'] ['EMAIL_SUBJECT']
-email_message = config ['Email'] ['EMAIL_MESSAGE']
 
 message = MIMEMultipart()
 message["From"] = sender_email
 message["To"] = recipient_email
 message["Subject"] = email_subject
-body = email_message
-message.attach(MIMEText(body, "plain"))
+
+html = f"""
+<html>
+  <body>
+    <p>Click the link below to access the Kibana dashboard:</p>
+    <a href="https://192.168.1.51">Kibana Dashboard</a>
+  </body>
+</html>
+"""
+message.attach(MIMEText(html, "html"))
 
 load_dotenv()
 email_password = os.getenv("EMAIL_PASSWORD")
+mail_time = config ['Email'] ['EMAIL_SEND_TIME']
+
+def _verify_time_format(date_str: str):
+    try:
+        datetime.datetime.strptime(date_str, '%H:%M')
+    except ValueError:
+        logging.error("Invalid EMAIL_SEND_TIME format (must be 24-hour format)")
+        exit(1)
 
 def send_email():
-    s = smtplib.SMTP('smtp.gmail.com',587)
-    s.set_debuglevel(1)
-    s.starttls()
-    s.login(sender_email, email_password)
-    s.sendmail(sender_email,recipient_email,message.as_string())
-    s.quit()
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as s:
+            s.starttls()
+            s.login(sender_email, str(email_password))
+            s.sendmail(sender_email, recipient_email, message.as_string())
+            s.quit()
+    except Exception as e:
+        logging.error("Unable to send email")
+        exit(1)
 
-mail_time = config ['Email'] ['EMAIL_SEND_TIME']
-h, m, am_pm = re.findall(r'\d+|\w+', mail_time)
-hour = int(h)
-mins = int(m)
-if am_pm.lower() == 'pm' and hour != 12:
-    hour += 12
-elif am_pm.lower() == 'am' and hour == 12:
-    hour = 0
+def schedule_email():
+    _verify_time_format(mail_time)
+    schedule.every().friday.at(mail_time).do(send_email)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
-mail_time = f'{hour:02d}:{mins:02d}'
-print(mail_time)
-
-
-schedule.every().day.at("07:24").do(send_email)
-
-while True:
-    schedule.run_pending()
-    time.sleep(60)
+send_email()
