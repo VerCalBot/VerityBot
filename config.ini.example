@@ -6,5 +6,8 @@ EMAIL_MESSAGE = The message you would like to send along with the dashboard link
 EMAIL_SEND_TIME = 07:00pm
 
 [Verkada]
+# Default number of days to pull on first run or if index is empty
 TIME_DELTA_INSTALLATION = 365
-TIME_DELTA_RECURRING = 1
+
+# number of times per day to pull updates from Verkada
+UPDATES_PER_DAY = 1
