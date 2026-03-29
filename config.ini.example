@@ -1,9 +1,9 @@
 [Email]
-EMAIL_TO = receiver_email@example.com
-EMAIL_FROM = your_email@example.com
-EMAIL_SUBJECT = Subject for the Email
-EMAIL_SEND_TIME = 09:00
+EMAIL_TO=receiver_email@example.com
+EMAIL_FROM=your_email@example.com
+EMAIL_SUBJECT=Subject for the Email
+EMAIL_SEND_TIME=09:00
 
 [Verkada]
-TIME_DELTA_INSTALLATION = 365
-TIME_DELTA_RECURRING = 1
+TIME_DELTA_INSTALLATION=365
+TIME_DELTA_RECURRING=1
