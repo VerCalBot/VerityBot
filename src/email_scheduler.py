@@ -20,7 +20,7 @@ def create_cron_job():
     mail_time = config ['Email'] ['EMAIL_SEND_TIME']
     hours, mins = _verify_time_format(mail_time)
 
-    script_path = os.path.abspath("src/send_email.py") 
+    script_path = os.path.abspath("src/email_sender.py") 
     # double check to make sure this is the path to the right executable
     python_executable = sys.executable
     command = f"{python_executable} {script_path}"
