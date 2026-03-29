@@ -1,9 +1,8 @@
+import logging
 import os
 import smtplib
-import schedule
-import time
-import datetime
-import logging
+import socket
+
 from dotenv import load_dotenv
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -22,7 +21,7 @@ html = f"""
 <html>
   <body>
     <p>Click the link below to access the Kibana dashboard:</p>
-    <a href="https://192.168.1.51">Kibana Dashboard</a>
+    <a href="https://{get_ip()}">Kibana Dashboard</a>
   </body>
 </html>
 """
@@ -30,14 +29,6 @@ message.attach(MIMEText(html, "html"))
 
 load_dotenv()
 email_password = os.getenv("EMAIL_PASSWORD")
-mail_time = config ['Email'] ['EMAIL_SEND_TIME']
-
-def _verify_time_format(date_str: str):
-    try:
-        datetime.datetime.strptime(date_str, '%H:%M')
-    except ValueError:
-        logging.error("Invalid EMAIL_SEND_TIME format (must be 24-hour format)")
-        exit(1)
 
 def send_email():
     try:
@@ -50,11 +41,20 @@ def send_email():
         logging.error("Unable to send email")
         exit(1)
 
-def schedule_email():
-    _verify_time_format(mail_time)
-    schedule.every().friday.at(mail_time).do(send_email)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+# for sending the link to Kibana through email
+# IP address is likely to change due to proxies or DHCP lease termination
+# this function attempts to connect to a host, resolves to localhost if no connection is made
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.254.254.254', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 send_email()
