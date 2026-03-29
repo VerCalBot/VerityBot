@@ -5,5 +5,8 @@ EMAIL_SUBJECT=Subject for the Email
 EMAIL_SEND_TIME=09:00
 
 [Verkada]
+# Default number of days to pull on first run or if index is empty
 TIME_DELTA_INSTALLATION=365
-TIME_DELTA_RECURRING=1
+
+# number of times per day to pull updates from Verkada
+UPDATES_PER_DAY=1

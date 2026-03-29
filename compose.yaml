@@ -63,6 +63,7 @@ services:
       - .env
     volumes:
       - ./certs/ca/ca.crt:/certs/ca.crt:ro
+      - ./config.ini:/config.ini
     depends_on:
       elasticsearch:
         condition: service_healthy
