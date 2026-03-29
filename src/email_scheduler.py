@@ -7,6 +7,7 @@ from crontab import CronTab
 from ConfigReader import config
 
 cron = CronTab(user=True)
+logging.basicConfig(level=logging.INFO)
 
 def _verify_time_format(date_str: str) -> list[str]:
     try:
