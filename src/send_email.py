@@ -17,19 +17,6 @@ message["From"] = sender_email
 message["To"] = recipient_email
 message["Subject"] = email_subject
 
-html = f"""
-<html>
-  <body>
-    <p>Click the link below to access the Kibana dashboard:</p>
-    <a href="https://{get_ip()}">Kibana Dashboard</a>
-  </body>
-</html>
-"""
-message.attach(MIMEText(html, "html"))
-
-load_dotenv()
-email_password = os.getenv("EMAIL_PASSWORD")
-
 def send_email():
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as s:
@@ -38,7 +25,7 @@ def send_email():
             s.sendmail(sender_email, recipient_email, message.as_string())
             s.quit()
     except Exception as e:
-        logging.error("Unable to send email")
+        logging.error(f"Unable to send email: error code {e.args.index}")
         exit(1)
 
 # for sending the link to Kibana through email
@@ -56,5 +43,18 @@ def get_ip():
     finally:
         s.close()
     return IP
+
+html = f"""
+<html>
+  <body>
+    <p>Click the link below to access the Kibana dashboard:</p>
+    <a href="https://{get_ip()}">Kibana Dashboard</a>
+  </body>
+</html>
+"""
+message.attach(MIMEText(html, "html"))
+
+load_dotenv()
+email_password = os.getenv("EMAIL_PASSWORD")
 
 send_email()

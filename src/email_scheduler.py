@@ -17,9 +17,10 @@ def create_cron_job():
     mail_time = config ['Email'] ['EMAIL_SEND_TIME']
     hours, mins = _verify_time_format(mail_time)
 
-    script_path = '/Users/jalen/git/VerityBot/src/send_email.py'
-    python_executable = '/usr/bin/python3'
-    command = f'{python_executable} {script_path}'
+    script_path = "/Users/jalen/git/VerityBot/src/send_email.py"
+    # make sure this is the path to the same executable used to run the project
+    python_executable = "/Users/jalen/git/VerityBot/venv/bin/python3"
+    command = f"{python_executable} {script_path}"
 
     job = cron.new(command=command, comment='Kibana Dashboard Email')
 
@@ -31,6 +32,6 @@ def create_cron_job():
 
     # write the job to the crontab
     cron.write()
-    print(f"Scheduled job: {command} to run daily at {mail_time}")
+    logging.info(f"Scheduled email to send at: {mail_time}")
 
 create_cron_job()
