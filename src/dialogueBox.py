@@ -1,6 +1,5 @@
 import tkinter as tk
 import configparser
-import tracemalloc
 
 def Save_Button():
 
