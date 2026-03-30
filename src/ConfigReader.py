@@ -1,5 +1,5 @@
 import configparser
-import Utils
+from Utils import get_project_root
 
 config = configparser.ConfigParser()
-config.read("/config.ini")
+config.read(f"{get_project_root()}/config.ini")
