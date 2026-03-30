@@ -2,16 +2,14 @@ import logging
 import CLI
 import ElasticSearch
 import os
-import Utils
 
-from dotenv import load_dotenv
 from Verkada import VerkadaContext
 from ConfigReader import config
 from datetime import datetime, date
 
 ELASTIC_PASSWORD = os.environ.get("ELASTIC_PASSWORD")
 if not ELASTIC_PASSWORD:
-    logging.error("ELASTIC_PASSWORD has not been set")
+    print("ERROR: ELASTIC_PASSWORD has not been set, exiting...")
     exit(1)
 
 def init():
