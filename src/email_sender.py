@@ -44,11 +44,12 @@ def get_ip():
         s.close()
     return IP
 
+IP = get_ip()
 html = f"""
 <html>
   <body>
     <p>Click the link below to access the Kibana dashboard:</p>
-    <a href="https://{get_ip()}">Kibana Dashboard</a>
+    <a href="https://{IP}">Kibana Dashboard</a>
   </body>
 </html>
 """
