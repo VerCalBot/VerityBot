@@ -17,9 +17,9 @@ EXCLUDED_FIELDS: set = {
     'scenarioInfo',
     'direction',
     'lockdownInfo',
-    'direction'
+    'direction',
     'auxInputId',
-    'auxInputName'
+    'auxInputName',
 }
 class VerkadaContext:
     def __init__(self, time_delta: int):
@@ -27,6 +27,7 @@ class VerkadaContext:
         self._session = requests.Session()
         self._time_delta: int = time_delta
         self._next_page_token: int = -1
+        self._verkada_api_key = None
 
     ## Verkada API-Specific Logic
     def current_page(self) -> dict:
@@ -37,6 +38,7 @@ class VerkadaContext:
 
     def login(self, verkada_api_key: str):
         logging.info("Logging in to Verkada")
+        self._verkada_api_key = verkada_api_key
         self._session.headers.update({
             "accept": "application/json",
             "x-api-key": verkada_api_key,
@@ -64,11 +66,27 @@ class VerkadaContext:
         st = response.status_code
         if st >= 200 and st < 300:
             return response
-        else:
-            logging.error("Verkada API error")
-            logging.error(response.text)
-            logging.error("Cannot continue")
-            exit(1)
+        
+        if st == 401 or st == 403:
+            logging.warning("Session expired. Attempting renewing session and retry get request")
+
+            if self._verkada_api_key is None:
+                logging.error("No Verkada API Key found. Failed to renew session.")
+                exit(1)
+
+            self.login(self._verkada_api_key)
+
+            response = self._session.get(f"https://api.verkada.com/{endpoint}")
+            st = response.status_code
+
+            if st >= 200 and st < 300:
+                return response
+
+        logging.error("Verkada API error")
+        logging.error(f"Status code: {st}") 
+        logging.error(response.text)
+        logging.error("Cannot continue")
+        exit(1)
 
     def _get_unix_timestamp(self) -> int:
         yesterday = datetime.date.today() - datetime.timedelta(self._time_delta)
