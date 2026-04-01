@@ -3,6 +3,7 @@ import requests
 import logging
 import datetime
 import Utils
+import time 
 
 # Fields to exclude from events
 EXCLUDED_FIELDS: set = {
@@ -60,29 +61,44 @@ class VerkadaContext:
 
     ### Generic helper for Verakada API endpoints
     def _get(self, endpoint: str) -> requests.Response:
-        logging.debug(f"GET Verkada API endpoint: {endpoint}")
-        response = self._session.get(f"https://api.verkada.com/{endpoint}")
+        logging.info(f"GET Verkada API endpoint: {endpoint}")
 
-        st = response.status_code
-        if st >= 200 and st < 300:
-            return response
-        
-        if st == 401 or st == 403:
-            logging.warning("Session expired. Attempting renewing session and retry get request")
+        max_attempts = 3
 
-            if self._verkada_api_key is None:
-                logging.error("No Verkada API Key found. Failed to renew session.")
-                exit(1)
-
-            self.login(self._verkada_api_key)
+        for attempt in range(1, max_attempts + 1):
 
             response = self._session.get(f"https://api.verkada.com/{endpoint}")
             st = response.status_code
 
+            # Success
             if st >= 200 and st < 300:
                 return response
+            
+            # Session expired, Retry logic
+            if st == 401 or st == 403:
+                logging.warning(f"Attempt {attempt}/{max_attempts}: Session expired, renewing session")
 
+                if self._verkada_api_key is None:
+                    logging.error("No Verkada API Key found. Failed to renew session.")
+                    exit(1)
+
+                self.login(self._verkada_api_key)
+                continue
+
+            # Internal Server Error
+            if st >= 500:
+                logging.warning(f"Attempt {attempt}/{max_attempts} failed with {st}")
+                logging.warning(response.text)
+                time.sleep(1)
+                continue
+
+            # any other errors will break the loop
+            break
+
+        # All attemps failed
+        logging.error(f"Failed after {max_attempts} attempts")
         logging.error("Verkada API error")
+        logging.error(f"Endpoint: {endpoint}")
         logging.error(f"Status code: {st}") 
         logging.error(response.text)
         logging.error("Cannot continue")

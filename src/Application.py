@@ -28,13 +28,22 @@ def init():
 
     verkada = VerkadaContext(time_delta=days_back)
 
-    logging.info(f"Initializing Verkada service")
+    logging.info("Initializing Verkada service")
     verkada.login(args.verkada_api_key)
 
+    # Waits to ensure ES is ready to receive data
     if ElasticSearch.wait_for_elasticsearch(password=str(ELASTIC_PASSWORD)):
+        # will loop until there are no more pages available
         while verkada.next_page_available():
             verkada.get_next_page()
-            if not verkada.is_eor_page():
-                ElasticSearch.send_bulk_ndjson(verkada.current_page_ndjson_bulk(), password=str(ELASTIC_PASSWORD))
+
+            # Only sends data if current pages is not empty ndjson
+            ndjson = verkada.current_page_ndjson_bulk()
+            if ndjson.strip():
+                ElasticSearch.send_bulk_ndjson(ndjson, password=str(ELASTIC_PASSWORD))
+
+            # Logs when we reached last page
+            if verkada.is_eor_page():
+                logging.info("Finished all pages")
     else:
         logging.error("ElasticSearch connection timed out")
