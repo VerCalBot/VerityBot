@@ -23,12 +23,13 @@ EXCLUDED_FIELDS: set = {
 }
 
 class VerkadaContext:
-    def __init__(self, time_delta: int):
+    def __init__(self, time_delta: int, start_timestamp: datetime.datetime = None):
         self._current_page: dict = {}
         self._session = requests.Session()
         self._time_delta: int = time_delta
         self._next_page_token: int = -1
         self._verkada_api_key = None
+        self._start_timestamp = start_timestamp
 
     ## Verkada API-Specific Logic
     def current_page(self) -> dict:
@@ -105,9 +106,13 @@ class VerkadaContext:
         exit(1)
 
     def _get_unix_timestamp(self) -> int:
-        yesterday = datetime.date.today() - datetime.timedelta(self._time_delta)
-        yesterday_dt = datetime.datetime.combine(yesterday, datetime.time.min, tzinfo=datetime.timezone.utc)
-        unix_time = int(yesterday_dt.timestamp())
+
+        if self._start_timestamp:
+            return int(self._start_timestamp.timestamp())
+
+        days_back = datetime.date.today() - datetime.timedelta(self._time_delta)
+        days_back_dt = datetime.datetime.combine(days_back, datetime.time.min, tzinfo=datetime.timezone.utc)
+        unix_time = int(days_back_dt.timestamp())
         return unix_time
 
     def get_next_page(self) -> dict:
