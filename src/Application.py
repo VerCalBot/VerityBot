@@ -32,27 +32,20 @@ def init():
     logging.info("Initializing Verkada service")
     verkada.login(args.verkada_api_key)
 
-    bulk_ndjson_parts = []
-
     # Waits to ensure ES is ready to receive data
     if ElasticSearch.wait_for_elasticsearch(password=str(ELASTIC_PASSWORD)):
         # will loop until there are no more pages available
         while verkada.next_page_available():
             verkada.get_next_page()
 
-            # Only adds data if current pages is not empty ndjson
+            # Only sends data if current pages is not empty ndjson
             ndjson = verkada.current_page_ndjson_bulk()
             if ndjson.strip():
-                bulk_ndjson_parts.append(ndjson)
+                ElasticSearch.send_bulk_ndjson(ndjson, password=str(ELASTIC_PASSWORD))
 
             # Logs when we reached last page
             if verkada.is_eor_page():
                 logging.info("Finished all pages")
-        
-        bulk_ndjson = "".join(bulk_ndjson_parts)
-
-        if bulk_ndjson.strip():
-            ElasticSearch.send_bulk_ndjson(bulk_ndjson, password=str(ELASTIC_PASSWORD))
 
     else:
         logging.error("ElasticSearch connection timed out")
