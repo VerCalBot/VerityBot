@@ -25,7 +25,7 @@ def Save_Button():
     co["Email"]["EMAIL_SUBJECT"] = newSubject
     co["Email"]["EMAIL_MESSAGE"] = newMessage
     co["Email"]["EMAIL_SEND_TIME"] = newSendTime
-    co["Verkada"]["TIME_DELTA_RECURRING"] = newFreq
+    co["Verkada"]["TIME_DELTA_INSTALLATION"] = newFreq
     dotenv.set_key(dotenv_file, "EMAIL_PASSWORD", newEmailPass)
     dotenv.set_key(dotenv_file, "VERKADA_API_KEY", newVerkAPI)
     dotenv.set_key(dotenv_file, "ELASTIC_PASSWORD", newElastPass)
@@ -78,11 +78,11 @@ inpSendTime = tk.Entry(root, width = 7)
 emailPassLabel = tk.Label(root, text="Email Password").grid(row=6, column=0)
 inpEmailPass = tk.Entry(root, width=50)
 
-#TIME_DELTA_RECURRING
+#TIME_DELTA_INSTALLATION
 freqLabel1 = tk.Label(root, text="Update Verkada")
 freqVar = tk.StringVar()
-verkadaTimeRecurring = co.get("Verkada", "TIME_DELTA_RECURRING")
-freqVar.set(verkadaTimeRecurring)
+verkadaTimeInstallation = co.get("Verkada", "TIME_DELTA_INSTALLATION")
+freqVar.set(verkadaTimeInstallation)
 freqSpinbox = tk.Spinbox(frame, textvariable=freqVar, from_=1, to=60, width = 4)
 freqLabel2 = tk.Label(frame, text="time(s) per day")
 
