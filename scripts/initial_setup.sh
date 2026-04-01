@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.."
 echo
 echo "Running dependencies check..."
 sudo apt update
-sudo apt install -y unzip nginx openssl
+sudo apt install -y unzip openssl
 echo "Dependencies check complete..."
 
 echo
