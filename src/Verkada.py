@@ -3,6 +3,7 @@ import requests
 import logging
 import datetime
 import Utils
+import time 
 
 # Fields to exclude from events
 EXCLUDED_FIELDS: set = {
@@ -17,16 +18,17 @@ EXCLUDED_FIELDS: set = {
     'scenarioInfo',
     'direction',
     'lockdownInfo',
-    'direction'
     'auxInputId',
-    'auxInputName'
+    'auxInputName',
 }
+
 class VerkadaContext:
     def __init__(self, time_delta: int):
         self._current_page: dict = {}
         self._session = requests.Session()
         self._time_delta: int = time_delta
         self._next_page_token: int = -1
+        self._verkada_api_key = None
 
     ## Verkada API-Specific Logic
     def current_page(self) -> dict:
@@ -37,6 +39,7 @@ class VerkadaContext:
 
     def login(self, verkada_api_key: str):
         logging.info("Logging in to Verkada")
+        self._verkada_api_key = verkada_api_key
         self._session.headers.update({
             "accept": "application/json",
             "x-api-key": verkada_api_key,
@@ -58,17 +61,48 @@ class VerkadaContext:
 
     ### Generic helper for Verakada API endpoints
     def _get(self, endpoint: str) -> requests.Response:
-        logging.debug(f"GET Verkada API endpoint: {endpoint}")
-        response = self._session.get(f"https://api.verkada.com/{endpoint}")
+        logging.info(f"GET Verkada API endpoint: {endpoint}")
 
-        st = response.status_code
-        if st >= 200 and st < 300:
-            return response
-        else:
-            logging.error("Verkada API error")
-            logging.error(response.text)
-            logging.error("Cannot continue")
-            exit(1)
+        max_attempts = 3
+
+        for attempt in range(1, max_attempts + 1):
+
+            response = self._session.get(f"https://api.verkada.com/{endpoint}")
+            st = response.status_code
+
+            # Success
+            if st >= 200 and st < 300:
+                return response
+            
+            # Session expired, Retry logic
+            if st == 401 or st == 403:
+                logging.warning(f"Attempt {attempt}/{max_attempts}: Session expired, renewing session")
+
+                if self._verkada_api_key is None:
+                    logging.error("No Verkada API Key found. Failed to renew session.")
+                    exit(1)
+
+                self.login(self._verkada_api_key)
+                continue
+
+            # Internal Server Error
+            if st >= 500:
+                logging.warning(f"Attempt {attempt}/{max_attempts} failed with {st}")
+                logging.warning(response.text)
+                time.sleep(1)
+                continue
+
+            # any other errors will break the loop
+            break
+
+        # All attemps failed
+        logging.error(f"Failed after {max_attempts} attempts")
+        logging.error("Verkada API error")
+        logging.error(f"Endpoint: {endpoint}")
+        logging.error(f"Status code: {st}") 
+        logging.error(response.text)
+        logging.error("Cannot continue")
+        exit(1)
 
     def _get_unix_timestamp(self) -> int:
         yesterday = datetime.date.today() - datetime.timedelta(self._time_delta)
