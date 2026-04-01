@@ -18,10 +18,10 @@ EXCLUDED_FIELDS: set = {
     'scenarioInfo',
     'direction',
     'lockdownInfo',
-    'direction',
     'auxInputId',
     'auxInputName',
 }
+
 class VerkadaContext:
     def __init__(self, time_delta: int):
         self._current_page: dict = {}
