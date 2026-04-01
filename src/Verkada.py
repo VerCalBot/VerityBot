@@ -115,9 +115,9 @@ class VerkadaContext:
         start_time = self._get_unix_timestamp()
 
         if self._current_page == {}:
-            endpoint += f"events/v1/access?start_time={start_time}&page_size=100"
+            endpoint += f"events/v1/access?start_time={start_time}&page_size=200"
         else:
-            endpoint += f"events/v1/access?start_time={start_time}&page_token={self._next_page_token}&page_size=100"
+            endpoint += f"events/v1/access?start_time={start_time}&page_token={self._next_page_token}&page_size=200"
 
         self._current_page = self._get(endpoint).json()
         self._next_page_token = self._current_page['next_page_token']

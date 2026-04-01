@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Run this from the root of the repo
 
-# terminate the script immediately if error occurs
-set -e
+# Exit on errors, prevent undefined variables, and fail if any command in a pipeline fails
+set -euo pipefail
 
 # Move into repo root
 cd "$(dirname "$0")/.."
@@ -37,8 +37,8 @@ for i in {1..60}; do
     echo "Still waiting... (${i}/60)"
     sleep 5
 
-    # if i equals 60 then fail
-    if [ "$i" -eq 60 ]; then
+    # if i is greater than or equal to 60 then fail
+    if [ "$i" -ge 60 ]; then
         fail "Elasticsearch did not start in time.
 Check logs with: docker compose -f ${INITIAL_COMPOSE} logs elasticsearch"
     fi
