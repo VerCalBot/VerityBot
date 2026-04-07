@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Run this in the root dir of your repo
 
-# terminate the script immediately if error occurs
-set -e
+# Exit on errors, prevent undefined variables, and fail if any command in a pipeline fails
+set -euo pipefail
 
 # Move into repo root
 cd "$(dirname "$0")/.."

@@ -5,7 +5,7 @@ import os
 
 from Verkada import VerkadaContext
 from ConfigReader import config
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 ELASTIC_PASSWORD = os.environ.get("ELASTIC_PASSWORD")
 if not ELASTIC_PASSWORD:
@@ -16,15 +16,18 @@ def init():
     args = CLI.setup_cli()
 
     days_back = int(config['Verkada']['TIME_DELTA_INSTALLATION'])
+    start_timestamp = None
+
     last_timestamp = ElasticSearch.get_latest_timestamp(password=str(ELASTIC_PASSWORD))
+
     # if no timestamp is found then time_delta remains installation default
     if last_timestamp:
         # Changes timestamp format to +00:00, then converts it to datetime, then drops time
-        last_timestamp_date = datetime.fromisoformat(last_timestamp.replace("Z", "+00:00")).date()
-        # Calculates number of days since last event
-        days_back = max((date.today() - last_timestamp_date).days, 1)
+        last_timestamp_dt = datetime.fromisoformat(last_timestamp.replace("Z", "+00:00"))
+        # Calculates datetime since last event
+        start_timestamp = last_timestamp_dt - timedelta(minutes=5)
 
-    verkada = VerkadaContext(time_delta=days_back)
+    verkada = VerkadaContext(time_delta=days_back, start_timestamp=start_timestamp)
 
     logging.info("Initializing Verkada service")
     verkada.login(args.verkada_api_key)
@@ -43,5 +46,6 @@ def init():
             # Logs when we reached last page
             if verkada.is_eor_page():
                 logging.info("Finished all pages")
+
     else:
         logging.error("ElasticSearch connection timed out")

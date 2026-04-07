@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # Run this from the root of the repo
 
-# terminate the script immediately if error occurs
-set -e
+# Exit on errors, prevent undefined variables, and fail if any command in a pipeline fails
+set -euo pipefail
 
 # Move into repo root
 cd "$(dirname "$0")/.."
 
-
 echo
-echo "Running dependencies script..."
-./scripts/install_dependencies.sh
+echo "Running dependencies check..."
+sudo apt update
+sudo apt install -y unzip openssl
+echo "Dependencies check complete..."
 
 echo
 echo "running elastic_setup.sh..."
@@ -19,10 +20,6 @@ echo "running elastic_setup.sh..."
 echo
 echo "Running certificate creation script for ElasticSearch..."
 ./scripts/cert_creation.sh
-
-echo
-echo "Running nginx setup..."
-./scripts/nginx_setup.sh
 
 echo
 echo "Starting normal secure stack..."

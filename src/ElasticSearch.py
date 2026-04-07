@@ -10,6 +10,8 @@ def send_bulk_ndjson(bulk_ndjson: str,ca_path: str = "/certs/ca.crt", user_name:
 
     for attempt in range(1, attempts + 1):
         try:
+            logging.info("Starting ElasticSearch Indexing")
+
             # Sends data to Bulk endpoint _bulk and content type is specified to ndjson
             response = requests.post(
                 url="https://elasticsearch:9200/_bulk",
