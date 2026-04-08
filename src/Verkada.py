@@ -31,7 +31,7 @@ class VerkadaContext:
         self._verkada_api_key = None
         self._start_timestamp = start_timestamp
         self._access_users = None
-        self._user_employment_title_dict = None
+        self._user_employment_department_dict = None
 
     ## Verkada API-Specific Logic
     def current_page(self) -> dict:
@@ -154,24 +154,24 @@ class VerkadaContext:
         self._access_users = users
         return users
 
-    # builds a dictionary with the key being the userId and the value being the employee title. This is stored as an object in VerkadaContext
-    def build_user_employment_title_dict(self) -> dict:
+    # builds a dictionary with the key being the userId and the value being the employee department. This is stored as an object in VerkadaContext
+    def build_user_employment_department_dict(self) -> dict:
 
-        if self._user_employment_title_dict is not None:
-            return self._user_employment_title_dict
+        if self._user_employment_department_dict is not None:
+            return self._user_employment_department_dict
 
         if self._access_users is None:
             self.get_access_users()
 
-        title_dict = {}
+        department_dict = {}
 
         for user in self._access_users:
             userId = user.get("user_id")
             if userId:
-                title_dict[userId] = user.get("department")
+                department_dict[userId] = user.get("department")
 
-        self._user_employment_title_dict = title_dict
-        return self._user_employment_title_dict
+        self._user_employment_department_dict = department_dict
+        return self._user_employment_department_dict
 
     def current_page_ndjson(self) -> str:
         return "\n".join(
@@ -189,20 +189,20 @@ class VerkadaContext:
         return filtered
 
     # Creates Bulk ndjson using event ID as "key" so all index events will be unique, and prevents duplication allowing for replacement in ElasticSearch
-    # Adds employee_title to events so that we can track type of users within verkada events
+    # Adds employee_department to events so that we can track type of users within verkada events
     def current_page_ndjson_bulk(self) -> str:
         events = [e for e in self._current_page.get("events", []) if e.get('event_info', {}).get('userName')]
         lines = []
 
-        if self._user_employment_title_dict is None:
-            self.build_user_employment_title_dict()
+        if self._user_employment_department_dict is None:
+            self.build_user_employment_department_dict()
 
 
         for e in events:
             userId = e.get("event_info", {}).get("userId")
-            title = self._user_employment_title_dict.get(userId)
-            if title:
-                e["event_info"]["userInfo"]["department"] = title
+            department = self._user_employment_department_dict.get(userId)
+            if department:
+                e["event_info"]["userInfo"]["department"] = department
             action = {
                 "index":{
                     "_index":"verkada_events",
