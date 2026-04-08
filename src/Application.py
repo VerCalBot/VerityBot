@@ -31,6 +31,7 @@ def init():
 
     logging.info("Initializing Verkada service")
     verkada.login(args.verkada_api_key)
+    user_title_dict = verkada.build_user_employment_title_dict()
 
     # Waits to ensure ES is ready to receive data
     if ElasticSearch.wait_for_elasticsearch(password=str(ELASTIC_PASSWORD)):
@@ -39,7 +40,7 @@ def init():
             verkada.get_next_page()
 
             # Only sends data if current pages is not empty ndjson
-            ndjson = verkada.current_page_ndjson_bulk()
+            ndjson = verkada.current_page_ndjson_bulk(user_title_dict)
             if ndjson.strip():
                 ElasticSearch.send_bulk_ndjson(ndjson, password=str(ELASTIC_PASSWORD))
 
