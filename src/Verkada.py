@@ -198,7 +198,6 @@ class VerkadaContext:
         if self._user_department_dict is None:
             self.build_user_department_dict()
 
-
         for e in events:
             userId = e.get("event_info", {}).get("userId")
             department = self._user_department_dict.get(userId)
