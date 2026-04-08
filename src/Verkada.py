@@ -190,12 +190,17 @@ class VerkadaContext:
 
     # Creates Bulk ndjson using event ID as "key" so all index events will be unique, and prevents duplication allowing for replacement in ElasticSearch
     # Adds employee_title to events so that we can track type of users within verkada events
-    def current_page_ndjson_bulk(self, _user_employment_title_dict) -> str:
+    def current_page_ndjson_bulk(self) -> str:
         events = [e for e in self._current_page.get("events", []) if e.get('event_info', {}).get('userName')]
         lines = []
+
+        if self._user_employment_title_dict is None:
+            self.build_user_employment_title_dict()
+
+
         for e in events:
             userId = e.get("event_info", {}).get("userId")
-            title = _user_employment_title_dict.get(userId)
+            title = self._user_employment_title_dict.get(userId)
             if title:
                 e["event_info"]["userInfo"]["department"] = title
             action = {
