@@ -23,7 +23,7 @@ def Save_Button():
     co["Email"]["EMAIL_TO"] = newTo
     co["Email"]["EMAIL_FROM"] = newFrom
     co["Email"]["EMAIL_SUBJECT"] = newSubject
-    co["Email"]["EMAIL_MESSAGE"] = newMessage
+    co["Email"]["EMAIL_BODY_PREFIX"] = newMessage
     co["Email"]["EMAIL_SEND_TIME"] = newSendTime
     co["Verkada"]["TIME_DELTA_INSTALLATION"] = newFreq
     dotenv.set_key(dotenv_file, "EMAIL_PASSWORD", newEmailPass)
@@ -66,7 +66,7 @@ inpFrom = tk.Entry(root, width=50)
 subLabel = tk.Label(root, text="Email Subject").grid(row=3, column=0)
 inpSubject = tk.Entry(root, width=50)
 
-#EMAIL_MESSAGE
+#EMAIL_BODY_PREFIX
 messageLabel = tk.Label(root, text="Email Message").grid(row=4, column=0)
 inpMessage = tk.Text(root, height=10, width=38)
 
@@ -130,7 +130,7 @@ inpKibEnc.grid(row=11, column=1, padx=5, pady=5, sticky='w')
 emailTo = co.get("Email", "EMAIL_TO")
 emailFrom = co.get("Email", "EMAIL_FROM")
 emailSubject = co.get("Email", "EMAIL_SUBJECT")
-emailMessage = co.get("Email", "EMAIL_MESSAGE")
+emailMessage = co.get("Email", "EMAIL_BODY_PREFIX")
 emailSendTime = co.get("Email", "EMAIL_SEND_TIME")
 emailPass = os.getenv("EMAIL_PASSWORD")
 verkAPIKey = os.getenv("VERKADA_API_KEY")
