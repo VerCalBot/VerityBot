@@ -1,6 +1,7 @@
 [Email]
 EMAIL_TO=receiver_email@example.com
 EMAIL_FROM=your_email@example.com
+EMAIL_BODY_PREFIX=Click the link below to access the Kibana dashboard:
 EMAIL_SUBJECT=Subject for the Email
 EMAIL_SEND_TIME=09:00
 
