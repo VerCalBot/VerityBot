@@ -8,5 +8,6 @@ EMAIL_SEND_TIME=09:00
 # Default number of days to pull on first run or if index is empty
 TIME_DELTA_INSTALLATION=365
 
-# number of times per day to pull updates from Verkada
-UPDATES_PER_DAY=1
+# This is how often you want to update elasticSearch (in 24-hour format)
+# i.e. every 15 minutes -> ELASTIC_UPDATE_INTERVAL=00:15
+ELASTIC_UPDATE_INTERVAL = 00:15
