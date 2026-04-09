@@ -39,7 +39,7 @@ def init():
         dotenv.set_key(dotenv_file,"KIBANA_ENCRYPTION_KEY", newKibEnc)
 
         #Writes new config values to file
-        with open("config.ini", "w") as f:
+        with open("/config.ini", "w") as f:
             co.write(f)
 
         #Successful save message
@@ -53,9 +53,9 @@ def init():
         inpKibEnc.insert("1.0", key or "")
     
     co = configparser.ConfigParser()
-    co.read("config.ini")
+    co.read("/config.ini")
     dotenv.load_dotenv()
-    dotenv_file = ".env"
+    dotenv_file = "/.env"
 
     root = tk.Tk(screenName=None, baseName='VerityBot', className='VerityBot', useTk=1)
     frame = tk.Frame(root)
@@ -170,3 +170,5 @@ def init():
     button.grid(row = 12, column = 0, columnspan = 2, pady = 5)
 
     root.mainloop()
+if __name__ == "__main__":
+    init()
