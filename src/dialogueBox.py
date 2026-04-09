@@ -2,6 +2,8 @@ import os
 import tkinter as tk
 import configparser
 import dotenv
+import secrets
+import base64
 
 
 def Save_Button():
@@ -38,8 +40,14 @@ def Save_Button():
 
     #Successful save message
     successfulSave = tk.Label(root, text="Saved Successfully!")
-    successfulSave.grid(row = 12, column = 0, columnspan = 2, pady = 5)
+    successfulSave.grid(row = 13, column = 0, columnspan = 2, pady = 5)
     root.after(2000, successfulSave.destroy)
+
+def generate_kibana_key():
+    key = base64.b64encode(secrets.token_bytes(32)).decode()
+    inpKibEnc.delete("1.0", "end")
+    inpKibEnc.insert("1.0", key or "")
+
 
 co = configparser.ConfigParser()
 co.read("config.ini")
@@ -48,6 +56,7 @@ dotenv_file = ".env"
 
 root = tk.Tk(screenName=None, baseName='VerityBot', className='VerityBot', useTk=1)
 frame = tk.Frame(root)
+frame2 = tk.Frame(root)
 
 root.geometry("")
 
@@ -100,8 +109,11 @@ inpKibPass = tk.Entry(root, width=50)
 
 #Kibana Encryption Key
 kibEncLabel = tk.Label(root, text="Kibana Encryption Key").grid(row=11, column=0)
-#Add functionality
-inpKibEnc = tk.Text(root, height = 2, width = 38)
+inpKibEnc = tk.Text(frame2, height = 2, width = 23)
+#Generate Encryption Key Button
+encButton = tk.Button(frame2, text="Generate Key", width=14, command=generate_kibana_key)
+
+
 
 #Title Insertion
 title.grid(row=0, column=0, columnspan=2, pady=10)
@@ -124,7 +136,9 @@ freqLabel2.grid(row=0, column=1)
 inpApiKey.grid(row=8, column=1, padx=5, pady=5, sticky='w')
 inpElastPass.grid(row=9, column=1, padx=5, pady=5, sticky='w')
 inpKibPass.grid(row=10, column=1, padx=5, pady=5, sticky='w')
-inpKibEnc.grid(row=11, column=1, padx=5, pady=5, sticky='w')
+frame2.grid(row=11, column=1, padx=5, pady=5, sticky='w')
+inpKibEnc.grid(row=0, column=0)
+encButton.grid(row=0, column=1, padx=5)
 
 #Getting existing config values
 emailTo = co.get("Email", "EMAIL_TO")
@@ -151,7 +165,7 @@ inpKibPass.insert(0, kibanaPass or "")
 inpKibEnc.insert("1.0", kibanaEncKey or "")
 
 #Save Button
-button = tk.Button(root, text="Save", width=25, command=Save_Button)
+button = tk.Button(root, text="Save", width=20, command=Save_Button)
 button.grid(row = 12, column = 0, columnspan = 2, pady = 5)
 
 root.mainloop()
