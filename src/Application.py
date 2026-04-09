@@ -2,10 +2,13 @@ import logging
 import CLI
 import ElasticSearch
 import os
+import dialogueBox
 
 from Verkada import VerkadaContext
 from ConfigReader import config
 from datetime import datetime, date
+
+dialogueBox.init()
 
 ELASTIC_PASSWORD = os.environ.get("ELASTIC_PASSWORD")
 if not ELASTIC_PASSWORD:
