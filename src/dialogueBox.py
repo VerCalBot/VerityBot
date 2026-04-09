@@ -44,7 +44,7 @@ def init():
 
         #Successful save message
         successfulSave = tk.Label(root, text="Saved Successfully!")
-        successfulSave.grid(row = 12, column = 0, columnspan = 2, pady = 5)
+        successfulSave.grid(row = 13, column = 0, columnspan = 2, pady = 5)
         root.after(2000, successfulSave.destroy)
 
     def generate_kibana_key():
