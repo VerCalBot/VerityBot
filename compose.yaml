@@ -61,9 +61,14 @@ services:
     container_name: etl_json
     env_file: 
       - .env
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./certs/ca/ca.crt:/certs/ca.crt:ro
       - ./config.ini:/config.ini
+      - ./.env:/.env
     depends_on:
       elasticsearch:
         condition: service_healthy
