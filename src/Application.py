@@ -8,8 +8,6 @@ from Verkada import VerkadaContext
 from ConfigReader import config
 from datetime import datetime, date
 
-dialogueBox.init()
-
 ELASTIC_PASSWORD = os.environ.get("ELASTIC_PASSWORD")
 if not ELASTIC_PASSWORD:
     print("ERROR: ELASTIC_PASSWORD has not been set, exiting...")
