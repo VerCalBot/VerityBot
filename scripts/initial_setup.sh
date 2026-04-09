@@ -18,22 +18,6 @@ fail() {
     exit 1
 }
 
-# Set DISPLAY for Tkinter GUI through XcXsrv
-echo "Configuring display for GUI..."
-WINDOWS_IP=$(ip route show default | awk '{print $3}')
-
-if [ -z "$WINDOWS_IP" ]; then
-    fail "Could not determine Windows host IP. Are you running in WSL?"
-fi
-
-export DISPLAY=$WINDOWS_IP:0.0
-echo "DISPLAY set to $DISPLAY"
-
-# Verify XcXsrv is reachable
-if ! xset q &>/dev/null; then
-    fail "Cannot connect to XcXsrv at $DISPLAY. Make sure XcXsrv is running on Windows with 'Disable access control' checked."
-fi
-echo "X server connection verified."
 
 echo "Make sure your .env file already contains the kibana_system password before continuing."
 echo "Starting initial stack..."
