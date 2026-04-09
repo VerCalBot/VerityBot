@@ -8,19 +8,7 @@ from Verkada import VerkadaContext
 from ConfigReader import config
 from datetime import datetime, date
 
-def is_display_available():
-    try:
-        import tkinter as tk
-        root = tk.Tk()
-        root.destroy()
-        return True
-    except Exception:
-        return False
-
-if is_display_available():  
-    dialogueBox.init()
-else:
-    print("Running in headless mode (no GUI)")
+dialogueBox.init()
 
 ELASTIC_PASSWORD = os.environ.get("ELASTIC_PASSWORD")
 if not ELASTIC_PASSWORD:
