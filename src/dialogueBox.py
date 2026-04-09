@@ -12,6 +12,8 @@ def init():
 
     def Save_Button():
 
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
         #Get new values from the user entries
         newTo = inpTo.get()
         newFrom = inpFrom.get()
@@ -39,21 +41,23 @@ def init():
         dotenv.set_key(dotenv_file,"KIBANA_ENCRYPTION_KEY", newKibEnc)
 
         #Writes new config values to file
-        with open("config.ini", "w") as f:
+        with open(os.path.join(BASE_DIR, '..', 'config.ini'), "w") as f:
             co.write(f)
 
         #Successful save message
         successfulSave = tk.Label(root, text="Saved Successfully!")
-        successfulSave.grid(row = 13, column = 0, columnspan = 2, pady = 5)
+        successfulSave.grid(row = 12, column = 0, columnspan = 2, pady = 5)
         root.after(2000, successfulSave.destroy)
 
     def generate_kibana_key():
         key = base64.b64encode(secrets.token_bytes(32)).decode()
         inpKibEnc.delete("1.0", "end")
         inpKibEnc.insert("1.0", key or "")
-    
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
     co = configparser.ConfigParser()
-    co.read("config.ini")
+    co.read(os.path.join(BASE_DIR, '..', 'config.ini'))
     dotenv.load_dotenv()
     dotenv_file = ".env"
 
@@ -170,3 +174,6 @@ def init():
     button.grid(row = 12, column = 0, columnspan = 2, pady = 5)
 
     root.mainloop()
+
+if __name__ == "__main__":
+    init()
