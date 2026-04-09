@@ -7,3 +7,4 @@ urllib3==2.6.3
 pytest
 pytest-mock
 elasticsearch
+tkinter
