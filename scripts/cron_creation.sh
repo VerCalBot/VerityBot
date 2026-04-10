@@ -24,9 +24,20 @@ extract_email_time_field()
   #IFS=':' read -r hours mins <<< "$time"
 }
 
-extract_etl_time_field()
+extract_field()
 {
-  update_interval="$(grep $1 config.ini | cut -d '=' -f2)"
+  echo "$(grep $1 config.ini | cut -d '=' -f2)"
+}
+
+parse_email_time_field()
+{
+  local h_or_m=$(extract_field "EMAIL_SEND_TIME" | cut -d ':' -f$1)
+
+  if [[ "$h_or_m" == "00" ]]; then
+    echo "0"
+  else
+    echo $h_or_m | grep -oE '[1-9]+'
+  fi
 }
 
 write_cron_job()
@@ -41,12 +52,12 @@ fail() {
 }
 
 echo "Creating cron job for ETL..."
-extract_etl_time_field "ELASTIC_UPDATE_INTERVAL"
+update_interval=$(extract_field "ELASTIC_UPDATE_INTERVAL")
 
-DOCKER_PATH="$(which "docker")"
-COMPOSE_PATH="$(realpath "compose.yaml")"
+CRON_EXEC="$(which "docker")"
+CRON_TARGET="$(realpath "compose.yaml")"
 
-cron_command="${DOCKER_PATH} compose -f ${COMPOSE_PATH} up -d"
+cron_command="${CRON_EXEC} compose -f ${CRON_TARGET} up -d"
 
 case $update_interval in
   *m)
@@ -69,4 +80,14 @@ esac
 write_cron_job
 echo "ETL cron job created!"
 
+
 echo "Creating cron job for email sender..."
+
+CRON_EXEC="$(which python3)"
+CRON_TARGET=$(realpath "src/email_sender.py")
+
+cron_command="${CRON_EXEC} ${CRON_TARGET}"
+cron_expression="$(parse_email_time_field "2") $(parse_email_time_field "1") * * * ${cron_command}"
+write_cron_job
+echo "Email cron job created!"
+
