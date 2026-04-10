@@ -8,21 +8,13 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # install dependencies
-echo "Installing dependencies..."
-# pip install python-dotenv
-# pip install python-crontab
+echo "Installing dependencies for email_sender.py..."
+pip install python-dotenv
 
 # for reading time fields
 declare update_interval
 declare cron_command
 declare cron_expression
-
-extract_email_time_field()
-{
-  echo "$(grep )"
-  #local time="$(grep -e $1 config.ini | grep -oE '[0-9]+|:' | tr -d '\n')"
-  #IFS=':' read -r hours mins <<< "$time"
-}
 
 extract_field()
 {
