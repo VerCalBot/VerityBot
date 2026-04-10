@@ -21,6 +21,10 @@ echo
 echo "Running certificate creation script for ElasticSearch..."
 ./scripts/cert_creation.sh
 
+echo 
+echo "running cron_creation.sh..."
+./scripts/cron_creation
+
 echo
 echo "Starting normal secure stack..."
 docker compose up -d
