@@ -95,12 +95,12 @@ def init():
     inpEmailPass = tk.Entry(root, width=50)
 
     #ELASTIC_UPDATE_INTERVAL
-    freqLabel1 = tk.Label(root, text="Update Verkada")
+    freqLabel1 = tk.Label(root, text="Update Verkada every")
     freqVar = tk.StringVar()
     verkadaTimeInstallation = co.get("Verkada", "ELASTIC_UPDATE_INTERVAL")
     freqVar.set(verkadaTimeInstallation)
     freqSpinbox = tk.Spinbox(frame, textvariable=freqVar, from_=1, to=60, width = 4)
-    freqLabel2 = tk.Label(frame, text="time(s) per day")
+    freqLabel2 = tk.Label(frame, text="minute(s)")
 
     #Verkada API
     apiKeyLabel = tk.Label(root, text="Verkada API Key").grid(row=8, column=0)
