@@ -40,7 +40,7 @@ docker compose up -d
 
 echo 
 echo "running cron_creation.sh..."
-./scripts/cron_creation
+./scripts/cron_creation.sh
 
 echo
 echo "Setup complete."
