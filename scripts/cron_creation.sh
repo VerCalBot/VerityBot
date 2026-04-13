@@ -14,7 +14,7 @@ declare cron_expression
 
 extract_field()
 {
-  echo "$(grep $1 config.ini | cut -d '=' -f2)"
+  echo "$(grep -i "$1" config.ini | cut -d '=' -f2 | xargs)"
 }
 
 fail() {
@@ -96,4 +96,5 @@ if [[ "$cron_expression" == *"-1"* ]]; then
 fi
 write_cron_job
 echo "Email cron job created!"
+
 
