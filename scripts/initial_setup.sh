@@ -7,6 +7,14 @@ set -euo pipefail
 # Move into repo root
 cd "$(dirname "$0")/.."
 
+if crontab -l >/dev/null 2>&1; then
+  echo "Cron jobs exist"
+  echo "Deleting Cron jobs"
+  crontab -r
+else
+  echo "No cron jobs"
+fi
+
 echo
 echo "Running dependencies check..."
 sudo apt update
