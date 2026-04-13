@@ -11,7 +11,15 @@ echo
 echo "Running dependencies check..."
 sudo apt update
 sudo apt install -y unzip openssl
+sudo apt install python3-venv
+sudo apt install python3-tk
 echo "Dependencies check complete..."
+
+echo 
+echo "Setting up Python virtual environment and installing dependencies..."
+python3 -m venv .venv
+source .venv/bin/activate
+pip install python-dotenv
 
 echo
 echo "Launching setup dialogue box..."

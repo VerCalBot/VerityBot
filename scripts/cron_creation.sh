@@ -7,12 +7,6 @@ set -euo pipefail
 # Move into repo root
 cd "$(dirname "$0")/.."
 
-# start venv and install dependencies
-echo "Starting a python virtual environment..."
-python3 -m venv .venv
-echo "Installing dependencies for email_sender.py..."
-pip install python-dotenv
-
 # for reading time fields
 declare update_interval
 declare cron_command
