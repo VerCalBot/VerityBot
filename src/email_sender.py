@@ -45,14 +45,21 @@ def get_ip():
     return IP
 
 IP = get_ip()
+
+# read prefix only from config (no env fallback)
+body_prefix = config['Email'].get(
+        'EMAIL_BODY_PREFIX', 'Click the link below to access the Kibana dashboard:'
+)
+
 html = f"""
 <html>
-  <body>
-    <p>Click the link below to access the Kibana dashboard:</p>
-    <a href="https://{IP}">Kibana Dashboard</a>
-  </body>
+    <body>
+        <p>{body_prefix}</p>
+        <a href="https://{IP}">Kibana Dashboard</a>
+    </body>
 </html>
 """
+
 message.attach(MIMEText(html, "html"))
 
 load_dotenv()

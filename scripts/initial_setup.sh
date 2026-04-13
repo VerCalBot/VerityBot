@@ -14,6 +14,11 @@ sudo apt install -y unzip openssl
 echo "Dependencies check complete..."
 
 echo
+echo "Launching setup dialogue box..."
+python3 ./src/dialogueBox.py
+echo "Setup dialogue box entry complete..."
+
+echo
 echo "running elastic_setup.sh..."
 ./scripts/elastic_setup.sh
 
