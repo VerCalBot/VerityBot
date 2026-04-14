@@ -35,6 +35,10 @@ python3 ./src/dialogueBox.py
 echo "Setup dialogue box entry complete..."
 
 echo
+echo "building images from compose.yaml..."
+docker compose build --no-cache
+
+echo
 echo "running elastic_setup.sh..."
 ./scripts/elastic_setup.sh
 

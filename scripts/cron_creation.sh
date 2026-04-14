@@ -37,7 +37,7 @@ parse_email_time_field()
       echo "0"
 
     else
-      echo $h_or_m | grep -oE '[1-9]+'
+      echo $((10#$h_or_m))
     fi
 
   else
