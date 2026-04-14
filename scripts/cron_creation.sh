@@ -33,8 +33,8 @@ parse_email_time_field()
     if (( ("$1" == "1" && $stoi > 23) || ("$1" == "2" && $stoi > 59) )); then
       echo "-1"
 
-    elif [[ "$h_or_m" == "00" ]]; then
-      echo "0"
+    #elif [[ "$h_or_m" == "00" ]]; then
+    #  echo "0"
 
     else
       echo $((10#$h_or_m))
