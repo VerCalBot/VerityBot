@@ -4,13 +4,16 @@ import ElasticSearch
 import os
 
 from Verkada import VerkadaContext
-from ConfigReader import config
+import configparser
 from datetime import datetime, date, timedelta
 
 ELASTIC_PASSWORD = os.environ.get("ELASTIC_PASSWORD")
 if not ELASTIC_PASSWORD:
     print("ERROR: ELASTIC_PASSWORD has not been set, exiting...")
     exit(1)
+
+config = configparser.ConfigParser()
+config.read("/config.ini")
 
 def init():
     args = CLI.setup_cli()

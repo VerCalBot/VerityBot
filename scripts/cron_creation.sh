@@ -80,7 +80,7 @@ echo "ETL cron job created!"
 
 echo "Creating cron job for email sender..."
 
-CRON_EXEC="$(which python3)"
+CRON_EXEC="$(pwd)/.venv/bin/python"
 CRON_TARGET=$(realpath "src/email_sender.py")
 
 cron_command="${CRON_EXEC} ${CRON_TARGET}"
