@@ -21,6 +21,7 @@ def init():
         newMessage = inpMessage.get("1.0", "end-1c")
         newSendTime = inpSendTime.get()
         newFreq = freqVar.get()
+        newFreqUnit = timeUnit.get()
         newEmailPass = inpEmailPass.get()
         newVerkAPI = inpApiKey.get("1.0", "end-1c")
         newElastPass = inpElastPass.get()
@@ -33,7 +34,7 @@ def init():
         co["Email"]["EMAIL_SUBJECT"] = newSubject
         co["Email"]["EMAIL_BODY_PREFIX"] = newMessage
         co["Email"]["EMAIL_SEND_TIME"] = newSendTime
-        co["Verkada"]["ELASTIC_UPDATE_INTERVAL"] = newFreq
+        co["Verkada"]["ELASTIC_UPDATE_INTERVAL"] = newFreq + newFreqUnit
         dotenv.set_key(dotenv_file, "EMAIL_PASSWORD", newEmailPass)
         dotenv.set_key(dotenv_file, "VERKADA_API_KEY", newVerkAPI)
         dotenv.set_key(dotenv_file, "ELASTIC_PASSWORD", newElastPass)
@@ -84,7 +85,7 @@ def init():
 
     #EMAIL_BODY_PREFIX
     messageLabel = tk.Label(root, text="Email Message").grid(row=4, column=0)
-    inpMessage = tk.Text(root, height=10, width=38)
+    inpMessage = tk.Text(root, height=10, width=55)
 
     #EMAIL_SEND_TIME
     sendTimeLabel = tk.Label(root, text="Email Send Time (24HR)").grid(row=5, column=0)
@@ -95,12 +96,16 @@ def init():
     inpEmailPass = tk.Entry(root, width=50)
 
     #ELASTIC_UPDATE_INTERVAL
-    freqLabel1 = tk.Label(root, text="Update Verkada every")
+    freqLabel1 = tk.Label(root, text="Update Elastic every")
     freqVar = tk.StringVar()
     verkadaTimeInstallation = co.get("Verkada", "ELASTIC_UPDATE_INTERVAL")
-    freqVar.set(verkadaTimeInstallation)
-    freqSpinbox = tk.Spinbox(frame, textvariable=freqVar, from_=1, to=60, width = 4)
-    freqLabel2 = tk.Label(frame, text="minute(s)")
+    freqVar.set(verkadaTimeInstallation[:-1])
+    timeUnit = tk.StringVar()
+    timeUnit.set(verkadaTimeInstallation[-1])
+    freqSpinbox = tk.Spinbox(frame, textvariable=freqVar, from_=1, to=59, width = 4) 
+    minutesRadio = tk.Radiobutton(frame, text="Minute(s)", variable=timeUnit,value="m")
+    hoursRadio = tk.Radiobutton(frame, text="Hour(s)",variable=timeUnit,value="h")
+    daysRadio = tk.Radiobutton(frame, text="Day(s)",variable=timeUnit,value="d")
 
     #Verkada API
     apiKeyLabel = tk.Label(root, text="Verkada API Key").grid(row=8, column=0)
@@ -135,7 +140,9 @@ def init():
     freqLabel1.grid(row=7, column=0, padx=5, pady=5)
     frame.grid(row=7, column=1, padx=5, pady=5, sticky='w')
     freqSpinbox.grid(row=0, column=0)
-    freqLabel2.grid(row=0, column=1)
+    minutesRadio.grid(row=0, column=1)
+    hoursRadio.grid(row=0, column=2)
+    daysRadio.grid(row=0, column=3)
 
     #ENV Entries
     inpApiKey.grid(row=8, column=1, padx=5, pady=5, sticky='w')
