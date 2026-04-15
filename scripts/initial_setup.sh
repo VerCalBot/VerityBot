@@ -30,6 +30,12 @@ source .venv/bin/activate
 pip install python-dotenv
 
 echo
+echo "Getting Windows IP"
+./scripts/get_ip.sh
+echo "Windows IP added to .env"
+
+
+echo
 echo "Launching setup dialogue box..."
 python3 ./src/dialogueBox.py
 echo "Setup dialogue box entry complete..."

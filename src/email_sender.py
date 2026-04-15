@@ -44,7 +44,8 @@ def get_ip():
         s.close()
     return IP
 
-IP = get_ip()
+load_dotenv()
+IP = os.getenv("WINDOWS_IP") or get_ip()
 
 # read prefix only from config (no env fallback)
 body_prefix = config['Email'].get(
@@ -55,14 +56,13 @@ html = f"""
 <html>
     <body>
         <p>{body_prefix}</p>
-        <a href="https://{IP}">Kibana Dashboard</a>
+        <a href="https://{IP}:5601/app/dashboards">Kibana Dashboard</a>
     </body>
 </html>
 """
 
 message.attach(MIMEText(html, "html"))
 
-load_dotenv()
 email_password = os.getenv("EMAIL_PASSWORD")
 
 send_email()
