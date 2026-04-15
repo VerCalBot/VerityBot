@@ -56,7 +56,7 @@ html = f"""
 <html>
     <body>
         <p>{body_prefix}</p>
-        <a href="https://{IP}:5601/app/dashboards">Kibana Dashboard</a>
+        <a href="https://{IP}:5601/app/dashboards">Kibana Dashboards</a>
     </body>
 </html>
 """
