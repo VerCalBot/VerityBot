@@ -2,43 +2,50 @@
 The project will allow for exploration of data pulled from the Verkada API.
 
 ## Requirements
-Python 3.x
+| Requirement                             | Installation                         |
+| --------------------------------------- | ------------------------------------ |
+| Docker Desktop                          | [Download Here](https://www.docker.com/products/docker-desktop/)     |
+| WSL                                     | Prompted during Docker install       |
 
-## Environment Variables
-This project uses an external API and requires environment variables to be set refer to .env.example.
+
 
 ## Project Structure
-src\
-    main.py
-    utils.py
-    Verkada.py
-.env.example
-.gitignore
-compose.yaml
-Dockerfile
-README.md
-requirements.txt
+
 
 
 ## Notes
 
-### First Time Setup
+### <a name="install-and-build">Install & Build 🛠️</a>
 
-Clone the repository.
+Download and install Docker Desktop from the above link
 
-Create your environment file from the .env template. \
-```cp .env.example .env```
+Create or sign into your Docker account
 
-Open the ```.env``` and set secrets.
 
-Make the setup script executable. \
-```chmod +x ./scripts/initial_setup.sh ./scripts/cert_creation.sh```
+### <a name="Initial Setup">Initial Setup 🧑‍💻</a>
+Ensure that Docker Desktop is open and running on your host machine
+<img src="./docs/README-Images/DockerRunning.png" alt="Docker Running" title="Docker Running">
 
-run the script. \
-```./scripts/initial_setup.sh```
+Search for WSL in Windows and open it
+<img src="./docs/README-Images/OpenWSL.gif" alt="Open WSL" title="Open WSL">
 
-When prompted enter the password for the user account ```kibana_system```. \
-**Note**: This should be the same password as the one you placed in ```.env``` for ```KIBANA_SYSTEM_PASSWORD```.
+Navigate to ```VerityBot/scripts``` and run ```./initial_setup.sh```
+<img src="./docs/README-Images/InitialSetup.png" alt="Initial Setup" title="Initial Setup">
+
+When prompted, enter your User password
+<img src="./docs/README-Images/UserPassword.png" alt="User Password" title="User Password">
+
+Enter your credentials into the popup dialogue box
+**Note**: All fields must be filled, use the ```Generate Key``` button to create a Kibana Encryption Key.
+**Note**: All passwords must be at least 6 characters long.
+<img src="./docs/README-Images/DialogueEntry.gif" alt="Dialogue Box" title="Dialogue Box">
+
+Click ```Save``` and exit the popup box
+<img src="./docs/README-Images/DialogueSave.gif" alt="Dialogue Box" title="Dialogue Box">
+
+When prompted, confirm you would like to continue and enter the password for ```kibana_system```. \
+**Note**: This should be the same password as the one you placed in the popup for ```Kibana Password```.
+<img src="./docs/README-Images/KibanaPrompt.png" alt="Kibana Prompt" title="Kibana Prompt">
 
 When you see *Setup Complete*, wait until the containers finish starting. \
 Use ```docker compose ps``` to check each containers status.
@@ -48,4 +55,5 @@ Once containers are fully running, then open Kibana. \
 
 log in with the following:
 Username: elastic
-Password: The value you set in your ```.env``` file for ```ELASTIC_PASSWORD```
+Password: The password you set in the popup box for ```Elastic Password```
+
