@@ -34,6 +34,13 @@ echo "Getting Windows IP"
 ./scripts/get_ip.sh
 echo "Windows IP added to .env"
 
+echo
+echo "Ensuring config.ini exists..."
+cp -n config.ini.example config.ini
+
+echo
+echo "Ensuring .env exists..."
+cp -n .env.example .env
 
 echo
 echo "Launching setup dialogue box..."
