@@ -2,6 +2,8 @@ import logging
 import os
 import smtplib
 import socket
+import subprocess
+import Utils
 
 from dotenv import load_dotenv
 from email.mime.multipart import MIMEMultipart
@@ -62,6 +64,9 @@ def get_ip():
     finally:
         s.close()
     return IP
+
+script_path = Utils.get_project_root() / "scripts" / "get_ip.sh"
+subprocess.run([script_path], check=True)
 
 load_dotenv()
 IP = os.getenv("WINDOWS_IP") or get_ip()
