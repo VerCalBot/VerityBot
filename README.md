@@ -1,5 +1,5 @@
 # **VerityBot**
-The project will allow for exploration of data pulled from the Verkada API.
+VerityBot is a robust, software solution intended for users who want to make informed security decisions. Using digital sensor data from Verkada -- a premier physical security platform, our application provides detailed, analytical insights into your Verkada system. It is portable, reliable, data-driven, and allows users to feel confident in making important security decisions.
 
 ## Requirements
 | Requirement                             | Installation                         |
@@ -8,8 +8,6 @@ The project will allow for exploration of data pulled from the Verkada API.
 | WSL                                     | Prompted during Docker install       |
 
 
-
-## Notes
 
 ### <a name="install-and-build">Install & Build 🛠️</a>
 
@@ -23,7 +21,7 @@ Clone the VerityBot git repository into the WSL2 terminal
 Ensure that Docker Desktop is open and running on your host machine \
 <img src="./docs/README-Images/DockerRunning.png" alt="Docker Running" title="Docker Running">
 
-Search for WSL in Windows and open it \
+Search for WSL in Windows and open it
 <img src="./docs/README-Images/OpenWSL.gif" alt="Open WSL" title="Open WSL">
 
 Navigate to ```VerityBot/scripts``` and run ```./initial_setup.sh``` \
@@ -44,14 +42,23 @@ When prompted, confirm you would like to continue and enter the password for ```
 **Note**: This should be the same password as the one you placed in the popup for ```Kibana Password```. \
 <img src="./docs/README-Images/KibanaPrompt.png" alt="Kibana Prompt" title="Kibana Prompt">
 
-When you see *Setup Complete*, wait until the containers finish starting. \
-Use ```docker compose ps``` to check each containers status.
+When you see *Setup Complete*, wait until the containers finish starting. 
+
+Use ```docker compose ps``` or view Docker Desktop to check each containers status.
+**Note**: The *etl_json* container will  \
+<img src="./docs/README-Images/Containers.png" alt="Containers" title="Containers">
 
 Once containers are fully running, then open Kibana. \
 ```https://localhost:5601```
 
 log in with the following:
 Username: elastic
-Password: The password you set in the popup box for ```Elastic Password```
+Password: The password you set in the popup box for ```Elastic Password``` \
+<img src="./docs/README-Images/Elastic.gif" alt="Project Structure" title="Project Structure">
 
-## Project Structure
+
+### <a name="Troubleshooting">Troubleshooting 🚧</a>
+Force quitting Docker Desktop and reopening it has been found to fix a variety of problems with VerityBot.
+
+### <a name="Project Structure">Project Structure 🏗️</a>
+<img src="./docs/README-Images/Workflow.png" alt="Project Structure" title="Project Structure">
