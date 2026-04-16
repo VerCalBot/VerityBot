@@ -44,7 +44,8 @@ def send_email():
         except Exception as e:
             logging.error(f"Unable to send email: error code {e.args.index}")
             exit(1)
-    logging.error("Unable to send email. Make sure the sender email is correct!")
+    else:
+        logging.error("Unable to send email. Make sure the sender email is correct!")
 
 # for sending the link to Kibana through email
 # IP address is likely to change due to proxies or DHCP lease termination
