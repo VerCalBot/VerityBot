@@ -25,7 +25,9 @@ echo "Dependencies check complete..."
 
 echo 
 echo "Setting up Python virtual environment and installing dependencies..."
-python3 -m venv .venv
+if [ ! -d ".venv" ]; then
+  python3 -m venv .venv
+fi
 source .venv/bin/activate
 pip install python-dotenv
 
