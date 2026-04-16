@@ -54,8 +54,8 @@ Use ```docker compose ps``` or view Docker Desktop to check each containers stat
 Once containers are fully running, then open Kibana. \
 ```https://localhost:5601```
 
-log in with the following:
-Username: elastic
+log in with the following: \
+Username: elastic \
 Password: The password you set in the popup box for ```Elastic Password``` \
 <img src="./docs/README-Images/Elastic.gif" alt="Project Structure" title="Project Structure">
 
