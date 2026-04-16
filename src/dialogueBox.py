@@ -18,15 +18,15 @@ def init():
         newTo = inpTo.get()
         newFrom = inpFrom.get()
         newSubject = inpSubject.get()
-        newMessage = inpMessage.get("1.0", "end-1c")
+        newMessage = inpMessage.get("1.0", "end").strip()
         newSendTime = inpSendTime.get()
         newFreq = freqVar.get()
         newFreqUnit = timeUnit.get()
         newEmailPass = inpEmailPass.get()
-        newVerkAPI = inpApiKey.get("1.0", "end-1c")
+        newVerkAPI = inpApiKey.get("1.0", "end").strip()
         newElastPass = inpElastPass.get()
         newKibPass =inpKibPass.get()
-        newKibEnc = inpKibEnc.get("1.0", "end-1c")
+        newKibEnc = inpKibEnc.get("1.0", "end").strip()
 
         #Updates config values
         co["Email"]["EMAIL_TO"] = newTo
@@ -40,6 +40,8 @@ def init():
         dotenv.set_key(dotenv_file, "ELASTIC_PASSWORD", newElastPass)
         dotenv.set_key(dotenv_file,"KIBANA_SYSTEM_PASSWORD", newKibPass)
         dotenv.set_key(dotenv_file,"KIBANA_ENCRYPTION_KEY", newKibEnc)
+        
+        dotenv.load_dotenv(override=True)
 
         #Writes new config values to file
         with open(os.path.join(BASE_DIR, '..', 'config.ini'), "w") as f:
