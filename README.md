@@ -1,4 +1,4 @@
-# **VerityBot - Subject to change**
+# **VerityBot**
 The project will allow for exploration of data pulled from the Verkada API.
 
 ## Requirements
@@ -9,42 +9,39 @@ The project will allow for exploration of data pulled from the Verkada API.
 
 
 
-## Project Structure
-
-
-
 ## Notes
 
 ### <a name="install-and-build">Install & Build 🛠️</a>
 
-Download and install Docker Desktop from the above link
+Follow this [guide](https://docs.docker.com/desktop/features/wsl/) to set up Docker Desktop and WSL2
+<img src="./docs/README-Images/WSL&Docker.png" alt="WSL & Docker" title="WSL & Docker">
 
-Create or sign into your Docker account
-
+Clone the VerityBot git repository into the WSL2 terminal
+```git clone git@github.com:VerCalBot/VerityBot.git```
 
 ### <a name="Initial Setup">Initial Setup 🧑‍💻</a>
-Ensure that Docker Desktop is open and running on your host machine
+Ensure that Docker Desktop is open and running on your host machine \
 <img src="./docs/README-Images/DockerRunning.png" alt="Docker Running" title="Docker Running">
 
-Search for WSL in Windows and open it
+Search for WSL in Windows and open it \
 <img src="./docs/README-Images/OpenWSL.gif" alt="Open WSL" title="Open WSL">
 
-Navigate to ```VerityBot/scripts``` and run ```./initial_setup.sh```
+Navigate to ```VerityBot/scripts``` and run ```./initial_setup.sh``` \
 <img src="./docs/README-Images/InitialSetup.png" alt="Initial Setup" title="Initial Setup">
 
-When prompted, enter your User password
+When prompted, enter your User password \
 <img src="./docs/README-Images/UserPassword.png" alt="User Password" title="User Password">
 
 Enter your credentials into the popup dialogue box
 **Note**: All fields must be filled, use the ```Generate Key``` button to create a Kibana Encryption Key.
-**Note**: All passwords must be at least 6 characters long.
+**Note**: All passwords must be at least 6 characters long. \
 <img src="./docs/README-Images/DialogueEntry.gif" alt="Dialogue Box" title="Dialogue Box">
 
-Click ```Save``` and exit the popup box
+Click ```Save``` and exit the popup box \
 <img src="./docs/README-Images/DialogueSave.gif" alt="Dialogue Box" title="Dialogue Box">
 
-When prompted, confirm you would like to continue and enter the password for ```kibana_system```. \
-**Note**: This should be the same password as the one you placed in the popup for ```Kibana Password```.
+When prompted, confirm you would like to continue and enter the password for ```kibana_system```. 
+**Note**: This should be the same password as the one you placed in the popup for ```Kibana Password```. \
 <img src="./docs/README-Images/KibanaPrompt.png" alt="Kibana Prompt" title="Kibana Prompt">
 
 When you see *Setup Complete*, wait until the containers finish starting. \
@@ -57,3 +54,4 @@ log in with the following:
 Username: elastic
 Password: The password you set in the popup box for ```Elastic Password```
 
+## Project Structure
