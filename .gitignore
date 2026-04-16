@@ -1,3 +1,6 @@
+# Folder containing CA and keys
+certs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -156,6 +159,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Configs .ini
+config.ini
 
 # Spyder project settings
 .spyderproject

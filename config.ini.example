@@ -1,0 +1,14 @@
+[Email]
+email_to = email@example.com
+email_from = email@example.com
+email_body_prefix = Click the link below to access link:
+email_subject = Subject Line goes here
+email_send_time = 14:40
+
+[Verkada]
+# Default number of days to pull on first run or if index is empty
+time_delta_installation = 3
+
+# This is how often you want to update elasticSearch
+# i.e. every 15 minutes -> ELASTIC_UPDATE_INTERVAL=15m
+elastic_update_interval = 15m
