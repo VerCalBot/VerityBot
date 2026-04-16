@@ -27,6 +27,9 @@ Search for WSL in Windows and open it
 Navigate to ```VerityBot/scripts``` and run ```./initial_setup.sh``` \
 <img src="./docs/README-Images/InitialSetup.png" alt="Initial Setup" title="Initial Setup">
 
+If prompted, confirm you would like to delete existing Cron jobs \
+<img src="./docs/README-Images/Cron.png" alt="Initial Setup" title="Initial Setup">
+
 When prompted, enter your User password \
 <img src="./docs/README-Images/UserPassword.png" alt="User Password" title="User Password">
 
