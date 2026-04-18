@@ -49,6 +49,11 @@ def init():
             # Logs when we reached last page
             if verkada.is_eor_page():
                 logging.info("Finished all pages")
+                break
+
+        logging.info("ETL job completed. Exiting container")
+        exit(0)
 
     else:
         logging.error("ElasticSearch connection timed out")
+        exit(1)
