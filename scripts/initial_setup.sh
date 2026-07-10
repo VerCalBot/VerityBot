@@ -29,7 +29,10 @@ if [ ! -d ".venv" ]; then
   python3 -m venv .venv
 fi
 source .venv/bin/activate
-pip install python-dotenv
+# email_sender.py runs from cron via this venv; it needs python-dotenv (config),
+# msal (Microsoft 365 OAuth2 token acquisition), and cryptography (loading the
+# certificate credential).
+pip install python-dotenv msal cryptography
 
 echo
 echo "Getting Windows IP"

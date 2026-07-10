@@ -1,5 +1,6 @@
 import os
 import tkinter as tk
+from tkinter import filedialog
 import configparser
 import dotenv
 import secrets
@@ -22,7 +23,9 @@ def init():
         newSendTime = inpSendTime.get()
         newFreq = freqVar.get()
         newFreqUnit = timeUnit.get()
-        newEmailPass = inpEmailPass.get()
+        newTenantId = inpTenantId.get().strip()
+        newClientId = inpClientId.get().strip()
+        newCertPath = inpCertPath.get().strip()
         newVerkAPI = inpApiKey.get("1.0", "end").strip()
         newElastPass = inpElastPass.get()
         newKibPass =inpKibPass.get()
@@ -35,7 +38,9 @@ def init():
         co["Email"]["EMAIL_BODY_PREFIX"] = newMessage
         co["Email"]["EMAIL_SEND_TIME"] = newSendTime
         co["Verkada"]["ELASTIC_UPDATE_INTERVAL"] = newFreq + newFreqUnit
-        dotenv.set_key(dotenv_file, "EMAIL_PASSWORD", newEmailPass)
+        dotenv.set_key(dotenv_file, "AZURE_TENANT_ID", newTenantId)
+        dotenv.set_key(dotenv_file, "AZURE_CLIENT_ID", newClientId)
+        dotenv.set_key(dotenv_file, "AZURE_CERT_PATH", newCertPath)
         dotenv.set_key(dotenv_file, "VERKADA_API_KEY", newVerkAPI)
         dotenv.set_key(dotenv_file, "ELASTIC_PASSWORD", newElastPass)
         dotenv.set_key(dotenv_file,"KIBANA_SYSTEM_PASSWORD", newKibPass)
@@ -56,6 +61,15 @@ def init():
         key = base64.b64encode(secrets.token_bytes(32)).decode()
         inpKibEnc.delete("1.0", "end")
         inpKibEnc.insert("1.0", key or "")
+
+    def browse_cert():
+        path = filedialog.askopenfilename(
+            title="Select Microsoft 365 certificate (private key + cert PEM)",
+            filetypes=[("PEM files", "*.pem"), ("All files", "*.*")],
+        )
+        if path:
+            inpCertPath.delete(0, "end")
+            inpCertPath.insert(0, path)
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -93,9 +107,18 @@ def init():
     sendTimeLabel = tk.Label(root, text="Email Send Time (24HR)").grid(row=5, column=0)
     inpSendTime = tk.Entry(root, width = 7)
 
-    #Email Password
-    emailPassLabel = tk.Label(root, text="Email Password").grid(row=6, column=0)
-    inpEmailPass = tk.Entry(root, width=50)
+    #Microsoft 365 app registration (OAuth2) -- three fields grouped in one row.
+    #See the "Microsoft 365 email setup" section of the README for how to obtain
+    #these values.
+    azureLabel = tk.Label(root, text="Microsoft 365 App").grid(row=6, column=0)
+    azureFrame = tk.Frame(root)
+    tk.Label(azureFrame, text="Tenant ID").grid(row=0, column=0, sticky='e')
+    inpTenantId = tk.Entry(azureFrame, width=40)
+    tk.Label(azureFrame, text="Client ID").grid(row=1, column=0, sticky='e')
+    inpClientId = tk.Entry(azureFrame, width=40)
+    tk.Label(azureFrame, text="Certificate Path").grid(row=2, column=0, sticky='e')
+    inpCertPath = tk.Entry(azureFrame, width=40)
+    certBrowseButton = tk.Button(azureFrame, text="Browse", command=browse_cert)
 
     #ELASTIC_UPDATE_INTERVAL
     freqLabel1 = tk.Label(root, text="Update Elastic every")
@@ -136,7 +159,11 @@ def init():
     inpSubject.grid(row=3, column=1, padx=5, pady=5, sticky='w')
     inpMessage.grid(row=4, column=1, padx=(5,15), pady=5, sticky='w')
     inpSendTime.grid(row=5, column=1, padx=5, pady=5, sticky='w')
-    inpEmailPass.grid(row=6, column=1, padx=5, pady=5, sticky='w')
+    azureFrame.grid(row=6, column=1, padx=5, pady=5, sticky='w')
+    inpTenantId.grid(row=0, column=1, padx=5, pady=2, sticky='w')
+    inpClientId.grid(row=1, column=1, padx=5, pady=2, sticky='w')
+    inpCertPath.grid(row=2, column=1, padx=5, pady=2, sticky='w')
+    certBrowseButton.grid(row=2, column=2, padx=5, pady=2, sticky='w')
 
     #Verkada Entries
     freqLabel1.grid(row=7, column=0, padx=5, pady=5)
@@ -160,7 +187,9 @@ def init():
     emailSubject = co.get("Email", "EMAIL_SUBJECT")
     emailMessage = co.get("Email", "EMAIL_BODY_PREFIX")
     emailSendTime = co.get("Email", "EMAIL_SEND_TIME")
-    emailPass = os.getenv("EMAIL_PASSWORD")
+    tenantId = os.getenv("AZURE_TENANT_ID")
+    clientId = os.getenv("AZURE_CLIENT_ID")
+    certPath = os.getenv("AZURE_CERT_PATH")
     verkAPIKey = os.getenv("VERKADA_API_KEY")
     elasticPass = os.getenv("ELASTIC_PASSWORD")
     kibanaPass = os.getenv("KIBANA_SYSTEM_PASSWORD")
@@ -172,7 +201,9 @@ def init():
     inpSubject.insert(0, emailSubject)
     inpMessage.insert("1.0", emailMessage)
     inpSendTime.insert(0, emailSendTime)
-    inpEmailPass.insert(0, emailPass or "")
+    inpTenantId.insert(0, tenantId or "")
+    inpClientId.insert(0, clientId or "")
+    inpCertPath.insert(0, certPath or "")
     inpApiKey.insert("1.0", verkAPIKey or "")
     inpElastPass.insert(0, elasticPass or "")
     inpKibPass.insert(0, kibanaPass or "")
