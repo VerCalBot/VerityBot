@@ -89,6 +89,15 @@ SMTP client submission is allowed for that mailbox. Run these in
 [Exchange Online PowerShell](https://learn.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell)
 as an Exchange administrator:
 
+> **Is there a web UI for this instead?** Mostly no. `New-ServicePrincipal`
+> (registering the app in Exchange) and granting that service principal
+> `FullAccess` to the mailbox are **PowerShell-only** — Microsoft provides no
+> admin-center UI for them, and the Exchange delegation picker only lists users
+> and groups, not app service principals. The **last** command, enabling
+> Authenticated SMTP, *does* have a UI: Microsoft 365 admin center →
+> **Users → Active users** → select the sender account → **Mail** →
+> **Manage email apps** → check **Authenticated SMTP** → **Save changes**.
+
 ```powershell
 Connect-ExchangeOnline
 
